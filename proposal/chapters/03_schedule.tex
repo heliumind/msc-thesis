@@ -1,0 +1,40 @@
+\chapter*{Project Plan}\label{chapter:schedule}
+
+The preliminary schedule for the thesis is visualized in
+Fig.~\ref{tab:schedule}. In total, five different work packages (WP) are shown.
+These will be described briefly in the following.
+
+\begin{table}[h]
+    \centering
+    \input{data/schedule} 
+    \caption{Thesis schedule}
+    \label{tab:schedule}
+\end{table}
+
+\subsection*{WP I - Creating Benchmark Pipeline}
+After setting up the evaluation pipeline and finalizing the selection of medical
+benchmarks, we will run them on existing models such as medBERT.de, GottBERT,
+Bio-GottBERT, GeistBERT to establish a baseline
+
+\subsection*{WP II - Creating Corpus}
+This will be the most time-consuming part of the thesis. Particularly
+challenging will be working with Springer Nature API and translating sources to
+German. Pre-processing will be done to obtain their binary representations.
+
+\subsection*{WP III - Training BERT Models}
+4 different models will be trained with different vocabulary sizes and starting
+points. The training will be done on the corpus created in the previous phase.
+The training will reuse GeistBERT's optimizer parameters and be done on a GPU
+cluster. 
+
+\subsection*{WP IV - Evaluating BERT Models}
+Pre-trained models will be fine-tuned on the benchmarks and evaluated on the
+pipeline created in the first work package. The results will be compared to the
+baselines and other state-of-the-art models obtained from WP I.
+
+\subsection*{WP V - Writing Thesis}
+This is the ongoing phase of writing the thesis. The chapters background and
+related work  will be written in parallel to the first work package. The last
+two months will be dedicated to writing the main part including methodology,
+evaluation, results the conclusion.
+

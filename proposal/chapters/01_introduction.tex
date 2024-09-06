@@ -1,0 +1,34 @@
+\chapter*{Motivation}\label{chapter:motivation}
+
+Self-supervised pre-training has gained significant traction in natural language
+processing (NLP) due to its ability to produce highly effective language models.
+Through extensive training on a vast corpus of text, a model can acquire
+valuable representations of the language. The emergence of transformer-based
+models, such as BERT~\cite{devlin2019bert} and its improved versions, such as
+RoBERTa~\cite{liu2019roberta} improved state-of-the-art performance on a variety
+of NLP tasks. Despite the advent of LLMs, BERT-like language models are more
+compute-efficient and thus continue to be highly significant. For instance, the
+LLaMA 3 model is roughly 70 times larger than Google's English BERT mode
+
+Performance of language models heavily depend on the underlying data used for
+pre-training. Evidently, research has shown that single language models
+outperform multilingual models trained on large texts of many languages and are
+even beneficial in terms of pre-training effort, efficiency in general or
+downstream task performance. 
+
+Moreover, even within the same language, technical language can vary
+significantly from everyday language, leading to the need of domain-specific
+models. This particularly holds for the medical domain. Medical language models
+designed specifically for analyzing and organizing medical text hold significant
+promise for enhancing the efficiency and precision of medical document handling.
+However, a major hurdle in training these models is the scarcity of appropriate
+text data, particularly for non-English languages. Despite these obstacles,
+advancing medical language models remains crucial, as they have the potential to
+manage the large volumes of text produced in hospitals every day.
+
+In order to address these challenges, the goal of this thesis is to develop a
+new comprehensive German clinical language model called ChristBERT:
+\textbf{C}linical- and \textbf{H}ealthcare-\textbf{R}elated \textbf{I}ssues and
+\textbf{S}ubjects \textbf{T}uned BERT. ChristBERT will be trained on a wide
+range of medical texts, including books on medicine, scientific literature, and
+hospital data from different medical domains.
