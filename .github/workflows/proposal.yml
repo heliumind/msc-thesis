@@ -6,8 +6,8 @@ name: Proposal
 # events but only for the master branch
 on:
   push:
-    paths: 
-    - 'proposal/**.tex'
+    # paths: 
+    # - 'proposal/**.tex'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -31,10 +31,12 @@ jobs:
           root_file: main.tex
           # The working directory for the LaTeX engine
           working_directory: proposal
+      - name: Rename file 
+        run: mv proposal/main.pdf proposal/proposal.pdf
       - name: Upload pdf
         uses: actions/upload-artifact@v4
         with:
           # Artifact name
           name: Propsal.pdf
           # A file, directory or wildcard pattern that describes what to upload
-          path: proposal/main.pdf
+          path: proposal/proposal.pdf
