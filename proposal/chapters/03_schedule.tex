@@ -14,17 +14,18 @@ These will be described briefly in the following.
 \subsection*{WP I - Creating Benchmark Pipeline}
 After setting up the evaluation pipeline and finalizing the selection of medical
 benchmarks, we will run them on existing models such as medBERT.de, GottBERT,
-Bio-GottBERT, GeistBERT to establish a baseline
+Bio-GottBERT, GeistBERT to establish a baseline.
 
 \subsection*{WP II - Creating Corpus}
 This will be the most time-consuming part of the thesis. Particularly
 challenging will be working with Springer Nature API and translating sources to
-German. Pre-processing will be done to obtain their binary representations.
+German. Pre-processing will be done to obtain their binary representations for
+fairseq.
 
 \subsection*{WP III - Training BERT Models}
-4 different models will be trained with different vocabulary sizes and starting
-points. The training will be done on the corpus created in the previous phase.
-The training will reuse GeistBERT's optimizer parameters and be done on a GPU
+4 models will be trained with different vocabulary sizes and starting points.
+The training will be done on the corpus created in the previous phase. The
+training will reuse GeistBERT's optimizer parameters and be done on a GPU
 cluster. 
 
 \subsection*{WP IV - Evaluating BERT Models}

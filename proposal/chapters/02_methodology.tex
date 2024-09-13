@@ -1,76 +1,85 @@
 \chapter*{Methodology}\label{chapter:methodology}
 
-ChristBERT will be built upon the foundation provided by the State-of-the-Art
+ChristBERT will be built upon the foundation provided by the state-of-the-art
 German language model GeistBERT. GeistBERT is an improved version of GottBERT
 leveraging a more diverse and larger training data as well as recent
 developments in pre-training methodologies such as Whole Word Masking (WWM). We
-will utilize the Byte-Pair Encoding (BPE) vocabulary introduced in
-GottBERT as a starting point, a tokenizer relying on subword units which are
-extracted by performing statistical analysis of the training corpus.
+will utilize the Byte-Pair Encoding (BPE) vocabulary introduced in GottBERT as a
+starting point, a tokenizer relying on subword units which are extracted by
+performing statistical analysis of the training corpus.
 
 Constructing ChristBERT will involve pre-training models from scratch
 initialized with GeistBERT's checkpoints, ensuring that it is tailored to the
-specific needs of the medical domain.
+specific needs of the medical domain. An interesting aspect of this development
+will be the creation of a domain-suitable vocabulary. The vocabulary size can be
+seen as hyperparameter and therefore could be investigated. In our case, we
+would refer to vocabulary sizes of 44k, 52k (used by GottBERT) and 60k. This
+will ensure that the model is both comprehensive in its understanding of medical
+language and efficient in processing it.
 
-A critical aspect of this development will be the creation of a domain-suitable
-vocabulary. The vocabulary size is a hyperparameter and  will be carefully
-determined, with reference to the vocabulary sizes of 44k, 52k (used by
-GottBERT) and 60k. This will ensure that the model is both comprehensive in its
-understanding of medical language and efficient in processing it.
-
-Consequently, we will be pre-training and comparing 4 different models in total
-with the following configurations:
+Consequently, the optimal plan is to pre-train and compare 4 different models in
+total with the following configurations:
 
 \begin{itemize}
-    \item Based on GeistBERT using GottBERT vocabulary as a baseline
-    \item From scratch using vocabulary sizes: 44k, 52k and 60k
+    \item Based on GeistBERT using GottBERT vocabulary
+    \item With an own specialized vocabulary in different sizes: 44k, 52k and
+    60k (if resources suffice)
 \end{itemize}
 
 Pre-Training objective on all configurations will be masked language modelling
-(MLM) with dynamically and whole word masked (WWM) inputs. Training parameters
-will be also adapted from GeistBERT's configuration.
+(MLM) using whole word masking (WWM) while utilizing
+fairseq~\cite{ott2019fairseq} as tooling. Training parameters will be adapted
+from GeistBERT's configuration.
 
 \subsection*{Training Data}
 
 Corpus creation will play a central role in the development of ChristBERT. The
 corpus will be composed of a diverse array of sources, including articles from
 information service provider for healthcare professionals Hpsmedia, German
-medical articles from Wikipedia, PubMed abstracts and Springer Nature articles.
+medical articles from Wikipedia, PubMed abstracts and full texts, Springer
+Nature articles and a crawled text corpora from the German Health Web inspired
+by~\cite{zowalla2020crawling}. 
+
 These sources will provide a broad spectrum of medical language data, ensuring
 the model's robustness and applicability. To enhance the diversity and coverage
 of the corpus, translation augmentation will be employed, allowing for the
 inclusion of texts that may not originally be in German. The crucial and
 challenging part of this thesis will be acquiring Springer Nature data with
-their API. Furthermore, if size is large enough, the corpus will integrate
-terminologies from SNOMED and scientific abstracts with biological and medical
-relevance from the LIVIVO seach engine.
+their API.
 
-In summary, the following sources will be used for corpus creation:
+In summary, the following sources could be used for corpus creation:
 
 \begin{itemize}
     \item Medical Wikipedia
     \item Hpsmedia Publishing Group
-    \item PubMed abstracts
     \item Springer Nature
-    \item optionally: SNOMED medical ontology
-    \item optionally: Abstracts from LIVIVO search engine
+    \item PubMed abstracts (augmented)
+    \item PMC: PubMed full text articles (augmented)
+    \item Internet corpus similar to sGHW~\cite{zowalla2020crawling}
+    \item Mimic (augmented, if possible)
+    \item PhD thesis of Charité (optionally)
+    \item radiology reports of Charité (if accessible)
+    \item Abstracts from LIVIVO search engine (if accessible)
 \end{itemize}
 
 \subsection*{Evaluation}
 
 ChristBERT will be evaluated in a rigorous process, leveraging existing
-codebases and evaluation pipelines where applicable. The model's performance
-will be benchmarked on a variety of downstream tasks after being fine-tuned on
-them respectively and compared with other state-of-the-art BERT models in the
-German medical domain. We will be using experiments analogous to those conducted
-for medBERT.de~\cite{bressem2024medbert}, as detailed on their Hugging Face
-page. A grid search similar to the one from GottBERT will be conducted to
-optimize the model's parameters focusing on batch size and learning rate. 
+codebases and evaluation pipelines where possible. The model's performance will
+be evaluated on a variety of downstream tasks after being fine-tuned on them
+respectively and compared with other state-of-the-art BERT models in the German
+(medical) domain. We will be using experiments analogous to those conducted for
+medBERT.de~\cite{bressem2024medbert}, as detailed on their Hugging Face page. A
+grid search similar to the one from GottBERT will be conducted to optimize the
+model's parameters focusing on batch size and learning rate. 
 
 The evaluation will include assessments on datasets such as
 BRONCO150~\cite{kittner2021bronco150}, GGPONC 2.0~\cite{borchert2022ggponc},
 MANTRA GSC~\cite{kors2015mantragsc}, GERNERMED++~\cite{frei2022gernermed}, and
 GPTNERMED~\cite{frei2023gptnermed}, ensuring that ChristBERT's performance is
-thoroughly vetted across a range of relevant medical tasks. Additionally, the
-i2c2 benchmark for smoker status classification, will be adapted into German for
-testing ChristBERT.
+thoroughly vetted across a range of relevant medical tasks. Which of these will
+actually be used will be decided in the course of the project. The decisive
+factors here are available resources and time as well as the characteristics of
+the data sets. Additionally, the i2c2 benchmark for smoker status
+classification, could be translated to German using NMT for another evaluation
+dataset, specifically for medical text classification.

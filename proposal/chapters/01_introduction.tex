@@ -1,34 +1,62 @@
 \chapter*{Motivation}\label{chapter:motivation}
 
-Self-supervised pre-training has gained significant traction in natural language
-processing (NLP) due to its ability to produce highly effective language models.
-Through extensive training on a vast corpus of text, a model can acquire
-valuable representations of the language. The emergence of transformer-based
-models, such as BERT~\cite{devlin2019bert} and its improved versions, such as
-RoBERTa~\cite{liu2019roberta} improved state-of-the-art performance on a variety
-of NLP tasks. Despite the advent of LLMs, BERT-like language models are more
-compute-efficient and thus continue to be highly significant. For instance, the
-LLaMA 3 model is roughly 70 times larger than Google's English BERT mode
+Over the past few years, self-supervised pre-training has gained significant
+traction in natural language processing (NLP) due to its ability to produce
+highly effective language models. Through extensive training on a vast corpus of
+text, a model can acquire valuable representations of the language. The rapid
+rise of models like ChatGPT has sparked a surge of interest in conversational
+AI, leading to widespread adoption across industries and a focus on refining
+large-scale generative models. This hype has accelerated research in areas like
+instruction-tuning, responsible AI, and the development of more specialized
+versions tailored for specific tasks.
+
+Despite the emerging potential of large language models (LLM), models based on
+the Bidirectional Encoder Representations from Transformers
+(BERT)~\cite{devlin2019bert}, including RoBERTa~\cite{liu2019roberta}, continue
+to be highly significant as they are more compute-efficient. For instance, the
+LLaMA models~\cite{touvron2023llama1, touvron2023llama2} are roughly 70 times
+larger than Google's English BERT model. 
 
 Performance of language models heavily depend on the underlying data used for
-pre-training. Evidently, research has shown that single language models
-outperform multilingual models trained on large texts of many languages and are
-even beneficial in terms of pre-training effort, efficiency in general or
-downstream task performance. 
+pre-training. A homogeneous text corpus generally leads to a poorer performing
+model compared to one trained on a diverse text corpus of high
+variance.~\cite{martin2020camembert}. Further, research has shown that single
+language models outperform multilingual models trained on large texts of many
+languages and are even beneficial in terms of efficiency, pre-training effort,
+and downstream task performance~\cite{scheible2020gottbert, chan2020german,
+martin2020camembert}.
 
-Moreover, even within the same language, technical language can vary
-significantly from everyday language, leading to the need of domain-specific
-models. This particularly holds for the medical domain. Medical language models
-designed specifically for analyzing and organizing medical text hold significant
-promise for enhancing the efficiency and precision of medical document handling.
-However, a major hurdle in training these models is the scarcity of appropriate
-text data, particularly for non-English languages. Despite these obstacles,
-advancing medical language models remains crucial, as they have the potential to
-manage the large volumes of text produced in hospitals every day.
+Even within the same language, domain-specific language can vary significantly
+from everyday language, leading to the need of domain-specific
+models~\cite{arefeva2022tourbert}. This particularly holds for the medical
+domain: Medical language models designed specifically for analyzing and
+organizing medical text hold significant promise for enhancing the efficiency
+and precision of medical document handling \cite{beltagy2019scibert,
+huang2019clinicalbert, peng2019transfer, lee2020biobert}. For the German medical
+domain, the effectiveness of such models has been demonstrated by
+Bio-GottBERT~\cite{lentzen2022critical} and
+medBERT.de~\cite{bressem2024medbert}. However, a major hurdle in training these
+models is the scarcity of appropriate domain-specific text data, particularly
+for non-English languages. Despite these obstacles, advancing medical language
+models remains crucial, as they have the potential to manage the large volumes
+of text produced in hospitals every day.
 
-In order to address these challenges, the goal of this thesis is to develop a
-new comprehensive German clinical language model called ChristBERT:
+The Bio-GottBERT model was trained on a relatively small corpus of approximately
+1 GB of text, while medBERT.de significantly expanded this dataset to 10 GB,
+incorporating a wider variety of sources. However, RoBERTa-based models have
+generally outperformed classic BERT models, as demonstrated by the recent
+success of GeistBERT in the general German domain. A common approach for
+augmenting language corpora in natural language translation is back-translation
+\cite{edunov2018understanding}, which involves translating a monolingual corpus
+using another neural machine translation (NMT) model \cite{ng2019facebook}. This
+technique can be effectively applied to the medical domain, utilizing sources
+like PubMed or even the MIMIC dataset \cite{johnson2016mimic}.
+
+Thus, in this work, we aim to construct a diverse corpus of medical texts, train
+models based on this corpus, and evaluate their performance on domain-specific
+tasks such as named entity recognition (NER) and classification. Leveraging our
+experience in model pre-training, we seek to enhance the applicability and
+effectiveness of these models in the medical domain and present  a new
+comprehensive German clinical language model called \textit{ChristBERT}:
 \textbf{C}linical- and \textbf{H}ealthcare-\textbf{R}elated \textbf{I}ssues and
-\textbf{S}ubjects \textbf{T}uned BERT. ChristBERT will be trained on a wide
-range of medical texts, including books on medicine, scientific literature, and
-hospital data from different medical domains.
+\textbf{S}ubjects \textbf{T}uned BERT.
