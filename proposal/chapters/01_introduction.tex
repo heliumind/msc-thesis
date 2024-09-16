@@ -45,12 +45,12 @@ The Bio-GottBERT model was trained on a relatively small corpus of approximately
 1 GB of text, while medBERT.de significantly expanded this dataset to 10 GB,
 incorporating a wider variety of sources. However, RoBERTa-based models have
 generally outperformed classic BERT models, as demonstrated by the recent
-success of GeistBERT in the general German domain. A common approach for
+success of GeistBERT~\cite{} in the general German domain. A common approach for
 augmenting language corpora in natural language translation is back-translation
 \cite{edunov2018understanding}, which involves translating a monolingual corpus
 using another neural machine translation (NMT) model \cite{ng2019facebook}. This
 technique can be effectively applied to the medical domain, utilizing sources
-like PubMed or even the MIMIC dataset \cite{johnson2016mimic}.
+like PubMed or even the MIMIC dataset \cite{johnson2023mimic}.
 
 Thus, in this work, we aim to construct a diverse corpus of medical texts, train
 models based on this corpus, and evaluate their performance on domain-specific

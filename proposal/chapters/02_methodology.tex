@@ -12,18 +12,23 @@ Constructing ChristBERT will involve pre-training models from scratch
 initialized with GeistBERT's checkpoints, ensuring that it is tailored to the
 specific needs of the medical domain. An interesting aspect of this development
 will be the creation of a domain-suitable vocabulary. The vocabulary size can be
-seen as hyperparameter and therefore could be investigated. In our case, we
-would refer to vocabulary sizes of 44k, 52k (used by GottBERT) and 60k. This
-will ensure that the model is both comprehensive in its understanding of medical
-language and efficient in processing it.
+seen as hyperparameter and therefore could be
+investigated.~\cite{toraman2023impact}. In our case, we would refer to
+vocabulary sizes of 44k, 52k (used by GottBERT) and 60k. This will ensure that
+the model is both comprehensive in its understanding of medical language and
+efficient in processing it.
 
 Consequently, the optimal plan is to pre-train and compare 4 different models in
 total with the following configurations:
 
 \begin{itemize}
     \item Based on GeistBERT using GottBERT vocabulary
-    \item With an own specialized vocabulary in different sizes: 44k, 52k and
-    60k (if resources suffice)
+    \item From scratch using GottBERT vocabulary
+    \item With an own specialized vocabulary of size 52k (if resources suffice)
+    \begin{itemize}
+        \item and potentially in two additional vocabulary sizes: 44k and 60k
+        (if resources suffice and if remains sensible)
+    \end{itemize}
 \end{itemize}
 
 Pre-Training objective on all configurations will be masked language modelling
