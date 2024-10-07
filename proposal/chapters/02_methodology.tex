@@ -1,6 +1,6 @@
 \chapter*{Methodology}\label{chapter:methodology}
 
-ChristBERT will be built upon the foundation provided by the state-of-the-art
+\ChristBERT{} will be built upon the foundation provided by the state-of-the-art
 German language model GeistBERT. GeistBERT is an improved version of GottBERT
 leveraging a more diverse and larger training data as well as recent
 developments in pre-training methodologies such as Whole Word Masking (WWM). We
@@ -8,7 +8,7 @@ will utilize the Byte-Pair Encoding (BPE) vocabulary introduced in GottBERT as a
 starting point, a tokenizer relying on subword units which are extracted by
 performing statistical analysis of the training corpus.
 
-Constructing ChristBERT will involve pre-training models from scratch
+Constructing \ChristBERT{} will involve pre-training models from scratch
 initialized with GeistBERT's checkpoints, ensuring that it is tailored to the
 specific needs of the medical domain. An interesting aspect of this development
 will be the creation of a domain-suitable vocabulary. The vocabulary size can be
@@ -31,14 +31,16 @@ total with the following configurations:
     \end{itemize}
 \end{itemize}
 
-Pre-Training objective on all configurations will be masked language modelling
-(MLM) using whole word masking (WWM) while utilizing
-fairseq~\cite{ott2019fairseq} as tooling. Training parameters will be adapted
-from GeistBERT's configuration.
+Training methodologies employed for \ChristBERT{} will follow the principles
+established by RoBERTa, focusing on optimizing the model's performance through
+extensive pre-training on a diverse medical corpus. Pre-Training objective on
+all configurations will be masked language modelling (MLM) using whole word
+masking (WWM) while utilizing fairseq~\cite{ott2019fairseq} as tooling. Training
+parameters will be adapted from GeistBERT's configuration.
 
 \subsection*{Training Data}
 
-Corpus creation will play a central role in the development of ChristBERT. The
+Corpus creation will play a central role in the development of \ChristBERT{}. The
 corpus will be composed of a diverse array of sources, including articles from
 information service provider for healthcare professionals Hpsmedia, German
 medical articles from Wikipedia, PubMed abstracts and full texts, Springer
@@ -69,7 +71,7 @@ In summary, the following sources could be used for corpus creation:
 
 \subsection*{Evaluation}
 
-ChristBERT will be evaluated in a rigorous process, leveraging existing
+\ChristBERT{} will be evaluated in a rigorous process, leveraging existing
 codebases and evaluation pipelines where possible. The model's performance will
 be evaluated on a variety of downstream tasks after being fine-tuned on them
 respectively and compared with other state-of-the-art BERT models in the German
@@ -81,7 +83,7 @@ model's parameters focusing on batch size and learning rate.
 The evaluation will include assessments on datasets such as
 BRONCO150~\cite{kittner2021bronco150}, GGPONC 2.0~\cite{borchert2022ggponc},
 MANTRA GSC~\cite{kors2015mantragsc}, GERNERMED++~\cite{frei2022gernermed}, and
-GPTNERMED~\cite{frei2023gptnermed}, ensuring that ChristBERT's performance is
+GPTNERMED~\cite{frei2023gptnermed}, ensuring that \ChristBERT{}'s performance is
 thoroughly vetted across a range of relevant medical tasks. Which of these will
 actually be used will be decided in the course of the project. The decisive
 factors here are available resources and time as well as the characteristics of
