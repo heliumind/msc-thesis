@@ -1,0 +1,27 @@
+\tikzset{ids/.style={text width=6mm},
+         vectors/.style={text width=3cm, align=center}}    
+
+\begin{tikzpicture}[
+    node distance=0.5cm,
+    font=\bfseries
+]
+    % Nodes for each ID and corresponding embedding vector
+    \node (id1) [ids] {1};
+    \node (vector1) [vectors, right=2cm of id1] {[-0.76, 0.01, -0.16]};
+
+    \node (id5) [ids, below=of id1] {5};
+    \node (vector5) [vectors, right=2cm of id5] {[0.12, 0.63, -0.11]};
+
+    \node (id103) [ids, below=of id5] {103};
+    \node (vector103) [vectors, right=2cm of id103] {[0.42, 0.71, -0.89]};
+
+    \node (id1027) [ids, below=of id103] {1027};
+    \node (vector1027) [vectors, right=2cm of id1027] {[0.27, -0.12, 0.99]};
+
+    % Arrows between IDs and embeddings
+    \draw[shorten >=0.5cm, shorten <=0.5cm, ->] (id1) -- (vector1);
+    \draw[shorten >=0.5cm, shorten <=0.5cm, ->] (id5) -- (vector5);
+    \draw[shorten >=0.5cm, shorten <=0.5cm, ->] (id103) -- (vector103);
+    \draw[shorten >=0.5cm, shorten <=0.5cm, ->] (id1027) -- (vector1027);
+
+\end{tikzpicture}

@@ -1,0 +1,44 @@
+\chapter{Conclusion} \label{chap:conclusion}
+
+In this study, we have systematically investigated distinct domain adaptation
+strategies for adapting language models to the German biomedical domain:
+continued pre-training from a general-domain model, pre-training entirely from
+scratch on biomedical data, and additionally adapting the vocabulary using
+domain-specific BPE. Central to this effort was the curation of a large-scale
+pre-training corpus, which prioritized data quantity and variety, while ensuring
+the inclusion of mostly publicly available data. In order to mitigate the
+scarcity of German biomedical data, we employed translation-based data
+augmentation to increase the corpus size. Based on the resulting corpus, we
+pre-trained three German clinical language models by following the
+aforementioned adaptation strategies. These models were rigorously benchmarked
+against existing general-purpose and medical German language models by
+evaluating performance intrinsically via perplexity during pre-training and
+extrinsically on a suite of domain-specific downstream tasks, namely NER and
+text classification across five different German biomedical datasets.
+
+The developed models set a new state-of-the-art for German clinical language in
+our experimental setup. However, the empirical results demonstrated that no
+single adaptation strategy universally outperformed the others. Continued
+pre-training achieved low perplexity quickly and performed well on certain NER
+tasks, benefiting from general language understanding. Pre-training from scratch
+was more computationally intensive but excelled in specific classification
+tasks, highlighting its strength in deep domain-specific feature learning.
+Domain-adapted BPE vocabulary provided nuanced improvements, especially for
+tasks requiring handling of specialized medical terminology, though its overall
+impact varied across downstream tasks. We conclude that the optimal domain
+adaptation strategy is context-dependent, involving a trade-off between
+computational resources, training efficiency, and the specific requirements of
+the target application.
+
+Based on these findings and the limitations identified, several avenues for
+future research emerge. Exploring architectures designed for longer sequence
+lengths could enhance performance on tasks requiring document-level context,
+common in clinical narratives. Expanding the pre-training corpus to include a
+wider variety of medical subdomains and potentially incorporating mixed-domain
+data could improve model generalizability. Finally, refining translation
+methodologies for corpus augmentation and investigating the impact of translated
+datasets on clinical applications remain important considerations for advancing
+the field of German biomedical NLP. This work contributes state-of-the-art
+German biomedical language models and provides valuable insights into domain
+adaptation strategies, paving the way for future advancements in clinical text
+processing and mining.

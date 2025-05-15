@@ -1,0 +1,22 @@
+\begin{tikzpicture}[
+    node distance=1cm,
+    font=\bfseries
+]
+
+    % Nodes
+    \node (text) {"Hello \faSmile~"};
+    \node (tokens) [below=of text] {
+        \begin{tabular}{c c c c c c c c c c}
+            H & e & l & l & o & \textvisiblespace & \faSmile \\
+            0x48 & 0x65 & 0x6c & 0x6c & 0x6f & 0x20 & 0xF0 0x9F 0xA6 0x9C
+        \end{tabular}
+    };
+    \node (ids) [below=of tokens] {
+        [72, 101, 108, 108, 111, 32, 240, 159, 166, 156]
+    };
+
+    % Arrows
+    \draw[->] (text) -- (tokens);
+    \draw[->] (tokens) -- (ids);
+
+\end{tikzpicture}

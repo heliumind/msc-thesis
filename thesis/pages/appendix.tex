@@ -1,0 +1,122 @@
+\chapter{Appendix}
+
+\begin{figure}[htbp]
+  % \begin{subfigure}{0.95\textwidth}
+  %   \centering
+  %   \includegraphics[width=\textwidth]{div_ppl_train}
+  %   \caption{Perplexity on training set}
+  % \end{subfigure}
+  % \begin{subfigure}{0.95\textwidth}
+  %   \centering
+  %   \includegraphics[width=\textwidth]{div_ppl_val}
+  %   \caption{Perplexity on validation set}
+  % \end{subfigure}
+  \centering
+  \includegraphics[width=0.95\textwidth]{div_ppl_val}
+  \caption[Perplexity during diverged pre-training of
+  \ChristBERT\textsubscript{scratch}]{Perplexity during diverged pre-training of
+  \ChristBERT\textsubscript{scratch}. Perplexity is shown in log scale for every
+  optimization step and evaluated on the validation split of the pre-training
+  corpus. The plot illustrates a sharp increase in perplexity around the
+  12,500th step, indicating model instability and failure to converge.}
+  \label{fig:div_ppl}
+\end{figure}
+
+\begin{table}[htb] 
+  \centering 
+  \input{data/model_props}
+  \caption[Vocabulary size and parameter size of evaluated models]{The
+  vocabulary size and parameter size are shown for the evaluated models. This
+  table does not show other design differences of the models. Values extracted
+  using \textsc{Huggingface Transformers} library~\cite{wolf2020transformers}.}
+  \label{tab:model_props}
+\end{table}
+
+\begin{table}[htb]
+    \centering
+    \input{data/train_gpu_time}
+    \caption[Computation time of pre-training]{Pre-training computation time in
+    days, hours and minutes summing up to 521 hours and 54 minutes, which are
+    approximately 21.74 days.}
+    \label{tab:train_gpu_time}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \input{data/eval_total_time}
+    \caption[Computation time of hyperparameter grid search]{Computation time in
+    hours, minutes and seconds spent on the hyperparameter grid search for
+    finding the best models for each task. The grid search was performed on a
+    single NVIDIA RTX 3090 GPU with 24 GB VRAM. The total computation time for
+    hyperparameter optimization sums up to 161 hours and 46 minutes, which are
+    approximately 6.74 days.}
+    \label{tab:eval_total_time}
+\end{table}
+
+\begin{table}[htbp]
+    \centerline{ 
+    \input{data/eval_gpu_time}} 
+    \caption[Computation time of fine-tuning and inference]{Fine-tuning (FT)
+    runtime in minutes and seconds, and prediction runtime (PT) in seconds of
+    the best downstream task models for each task. Both were performed on one
+    NVIDIA RTX 3090 GPU with 24 GB VRAM.}
+    \label{tab:eval_gpu_time}
+\end{table}
+
+\begin{table}[htbp]
+    \centerline{
+    \input{data/best_hyperparams}}
+    \caption[Best hyperparameters found in the grid search for the downstream
+    tasks]{Hyperparameters of the best downstream task models for each task and
+    pre-trained model. BS and LR denote batch size and learning rate,
+    respectively.}
+    \label{tab:best_hyperparams}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \input{data/eval_bronco_metrics}  
+  \caption[Overview of per entity precision, recall and \ff{} scores achieved on
+  the BRONCO150 dataset]{Overview of per entity precision (Prec.), recall (Rec.)
+  and \ff{} scores achieved on the BRONCO150 dataset All results are shown in
+  percent and assess each model's best fine-tuned performance on the test set.
+  The best model was selected out of 28 runs based on its validation set
+  performance. Best score in bold and second best underlined.}
+  \label{tab:bronco}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \input{data/eval_cardiode_metrics}  
+  \caption[Overview of per entity precision, recall and \ff{} scores achieved on
+  the CARDIO:DE dataset]{Overview of per entity precision (Prec.), recall (Rec.)
+  and \ff{} scores achieved on the CARDIO:DE dataset All results are shown in
+  percent and assess each model's best fine-tuned performance on the test set.
+  The best model was selected out of 28 runs based on its validation set
+  performance. Best score in bold and second best underlined.}
+  \label{tab:cardiode}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \input{data/eval_ggponc2_metrics}  
+  \caption[Overview of per entity precision, recall and \ff{} scores achieved on
+  the GGPONC dataset]{Overview of per entity precision (Prec.), recall (Rec.)
+  and \ff{} scores achieved on the GGPONC dataset All results are shown in percent
+  and assess each model's best fine-tuned performance on the test set. The best
+  model was selected out of 28 runs based on its validation set performance.
+  Best score in bold and second best underlined.}
+  \label{tab:ggponc2}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \input{data/eval_jsyncc_metrics}  
+  \caption[Overview of per class precision, recall and \ff{} scores achieved on
+  the JSynCC dataset]{Overview of per class precision (Prec.), recall (Rec.)
+  and \ff{} scores achieved on the JSynCC dataset All results are shown in
+  percent and assess each model's best fine-tuned performance on the test set.
+  The best model was selected out of 28 runs based on its validation set
+  performance. Best score in bold and second best underlined.}
+  \label{tab:jsyncc}
+\end{table}

@@ -1,0 +1,27 @@
+\begin{tikzpicture}[
+    block/.style={draw, rectangle, minimum width=2cm, minimum height=2cm, text centered, font=\bfseries},
+    arrow/.style={->, >=latex, thick}
+]
+
+% Encoder block
+\node[block] (encoder) at (0, 0) {Encoder};
+
+% Decoder block
+\node[block] (decoder) at (3, 0) {Decoder};
+
+% Tokens input for Encoder
+\node at (0, -2) (encoder_input) {Tokens};
+\draw[arrow] (encoder_input) -- (encoder.south);
+
+% Tokens input for Decoder
+\node at (3, -2) (decoder_input) {Tokens};
+\draw[arrow] (decoder_input) -- (decoder.south);
+
+% Token output from Decoder
+\node at (3, 2) (decoder_output) {Token};
+\draw[arrow] (decoder.north) -- (decoder_output);
+
+% Connection between Encoder and Decoder
+\draw[arrow] (encoder.east) -- (decoder.west);
+
+\end{tikzpicture}

@@ -1,0 +1,15 @@
+\begin{tikzpicture}[
+    node distance=1cm,
+    font=\bfseries
+]
+
+    % Nodes
+    \node (text) {"This is an apple."};
+    \node (tokens) [below=of text] {["This", "is", "an", "apple", "."]};
+    \node (ids) [below=of tokens] {[1, 5, 103, 1027, \texttt{[EOS]}]};
+
+    % Arrows
+    \draw[->] (text) -- (tokens);
+    \draw[->] (tokens) -- (ids);
+
+\end{tikzpicture}

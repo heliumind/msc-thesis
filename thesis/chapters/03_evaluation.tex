@@ -1,0 +1,235 @@
+\section{Downstream Task Evaluation} \label{sec:fine-tuning}
+
+With minimal adjustments to its architecture, pre-trained LMs can be utilized
+for downstream applications by \textbf{fine-tuning} them on task-specific
+datasets. In this kind of fine-tuning, application-specific circuitry (similar
+to language modeling heads) is added on top of pre-trained models, taking their
+output as its input. The fine-tuning process consists of continued training by
+using the labels of the supervised datasets to \textit{fine-tune} the weights of
+the pre-trained model and the additional circuitry.
+
+To demonstrate the efficacy of our domain-adapted model in biomedical language
+modeling, we fine-tune and evaluate the \ChristBERT{} models on two common
+biomedical downstream tasks: Named entity recognition and text classification.
+
+\subsection{Named Entity Recognition}
+
+Named Entity Recognition (NER) is one of the most fundamental biomedical text
+mining tasks as it is essential for extracting information from unstructured
+clinical narratives such as drug names, symptoms, or diseases. Examples of NLP
+applications building upon NER include question answering systems, machine
+translation and anonymizing texts for privacy purposes.
+
+A named entity generally refers to any element that can be identified by a
+proper name, such as a person, location, or organization. Given a text or a
+sequence of words $(w_1, \ldots, w_n)$, the task of NER is to identify and
+classify these proper names within the text into predefined categories
+$\mathcal{C} = \{c_1, \ldots, c_m\}$. The goal is to assign a label $l \in
+\mathcal{C}$ to spans of words in the input sequence, indicating the specific
+entity category to which it belongs. The NER task is typically framed as a
+sequence labeling problem, where each token in the input sequence is assigned a
+label from the fixed set of entity classes, while accurately identifying the
+boundaries of named entities.
+
+% The NER task is challenging due to the ambiguity in segmenting NER spans,
+% determining which tokens constitute entities and which do not, given that most
+% words in a text are not named entities. Another challenge arises from type
+% ambiguity, where the same entity might belong to multiple categories,
+% complicating the classification process.
+
+\subsubsection{IOB2 Labeling Scheme}
+In order to facilitate NER as a sequence labeling task, an appropriate
+annotation scheme is required that captures both the boundaries and their
+respective named entity types. One of the most widely used formats is the
+\textbf{IOB2 labeling scheme}~\cite{ramshaw1999text}, which stands for Inside,
+Outside, and Beginning. This scheme introduces an \texttt{O} (outside) label and
+prefixes entity categories with \texttt{I} (inside) and \texttt{B} (begin). For
+instance, in a NER task involving labels such as \texttt{PER} (person),
+\texttt{ORG} (organization), \texttt{LOC} (location), the IOB2 scheme employs
+the following labels: \texttt{O}, \texttt{I-PER}, \texttt{B-PER},
+\texttt{I-ORG}, \texttt{B-ORG}, \texttt{I-LOC}, \texttt{B-LOC}, \texttt{I-MISC}
+and \texttt{B-MISC}. Thus, the number of labels is $2m + 1$, where $m$ is the
+number of entity types.
+
+In practice, \texttt{B}-prefixed labels are used to tag the initial word of
+entities, while \texttt{I}-prefixed labels are applied to all subsequent words
+within the same entity. An example using the IOB2 format is shown in
+Fig.~\ref{fig:iob2}. This labeling approach ensures clarity when annotating
+adjacent entities, specifying which words belong to which entity. Without
+prefixed labels, such differentiation would not be possible.
+
+\begin{figure}[htbp]
+    \centering
+    \input{data/iob2}
+    \caption{Example of IOB2 labeling scheme}
+    \label{fig:iob2}
+\end{figure}
+
+\subsubsection{NER Datasets}
+The following publicly available datasets were used as benchmarks for NER task
+evaluation:
+
+\paragraph{BRONCO150}
+The \textit{BRONCO150}~\cite{kittner2021bronco150} corpus consists of randomly
+shuffled sentences originating from 150 discharge summary letters. The clinical
+notes are provided by the oncology departments of the Charité University
+Hospital in Berlin and the Tübingen University Hospital. The text has been
+anonymized to facilitate the sharing of the corpus. Accompanying the raw text
+are three label classes: \textit{Medication}, \textit{Treatment} and
+\textit{Diagnosis}.
+
+\paragraph{GGPONC}
+The \textit{GGPONC}~\cite{borchert2022ggponc} corpus is derived from the German
+project focused on medical guidelines for oncology. It mainly consists of
+free-form text excerpts of these guidelines, which are supplemented with manual
+annotations created by the authors. With a total of 201,838 clinical named
+entities from 10,193 recommendations and background texts, GGPONC constitutes
+the largest freely distributed data set of semantically annotated German medical
+texts. Given its source, the text style is anticipated to differ significantly
+from typical clinical text. However, this origin allows for circumvention of
+data-sharing constraints, such as the pseudonymization of patient-related
+information.
+
+There are two major versions of the corpus, from which we utilize the second
+version in this thesis. The NER-related annotations include the label classes
+\textit{Clinical Drug}, \textit{Diagnostic}, \textit{Nutrient / Body Substance},
+\textit{Therapeutic}, \textit{External Substance}, \textit{Diagnosis /
+Pathology}, and \textit{Other Finding} in the \textit{fine} mode, as well as the
+label classes \textit{Finding}, \textit{Substance}, and \textit{Procedure} in
+the \textit{coarse} mode. Additionally, there are two variations concerning the
+length of individual entity spans. The \textit{short} annotation approach
+results in shorter entity spans, while the \textit{long} annotation approach may
+include additional semantically relevant information within the spans. For our
+evaluation, we focus on the most demanding scenario, which involves eight
+fine-grained entity classes and long annotation spans. This choice reflects the
+experimental setup in \cite{bressem2024medbert}, allowing for better
+comparability of model performance.
+
+\paragraph{CARDIO:DE}
+While the previous two corpora focused on the oncology domain, the
+\textit{CARDIO:DE}~\cite{cardiode} corpus originates from 500 doctor's letters
+in the cardiovascular domain at the Heidelberg University Hospital. The NER
+annotation data include six label classes: \textit{ActiveIng}, \textit{Drug},
+\textit{Duration}, \textit{Form}, \textit{Frequency}, and \textit{Strength}.
+Additional annotation tasks, such as the segmentation of entire sections or
+paragraphs, are also covered, but they are not relevant to the context of this
+work. The authors released two subcorpora: \textit{CARDIO:DE} and
+\textit{CARDIO:DE\textsubscript{EXP}}. \textit{CARDIO:DE\textsubscript{EXP}}
+provides further label classes  \textit{Dosage}, \textit{Reason}, and
+\textit{Route}, but they are marked as experimental due to significant
+disagreements encountered during the annotation process. We omit these and
+instead focus on performing NER on the main dataset with six label classes.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \input{data/bronco_stats}
+        \caption{BRONCO150}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \input{data/cardiode_stats}
+        \caption{CARDIO:DE}
+    \end{subfigure} 
+    \\[\baselineskip]
+    \begin{subfigure}{0.8\textwidth}
+        \centering
+        \input{data/ggponc2_stats}
+        \caption{GGPONC with \textit{fine}-grained entity classes and
+        \textit{long} annotation spans}
+    \end{subfigure}
+    \\[\baselineskip] 
+    \begin{subfigure}{0.8\textwidth}
+        \centering
+        \input{data/jsyncc_stats}
+        \caption{JSynCC}
+    \end{subfigure}
+    \caption{Entity and class distributions of the downstream tasks}
+    \label{fig:benchmark_stats}
+\end{figure}
+
+\subsection{Text Classification}
+
+Text classification is the process of assigning one or more labels to an entire
+sequence of text based on its content. If a document is categorized into one of
+two possible labels, it is referred to as a \textbf{binary classification}
+problem. In \textbf{multi-class classification}, there are more than two
+classes, and each document is assigned to exactly one of these classes. In
+contrast, \textbf{multi-label classification} allows a document to be assigned
+to a set of multiple labels.
+
+\subsubsection{Text Classification Datasets} \label{sec:cls_datasets}
+In the following, we provide an overview of the text classification benchmarks
+selected for evaluation as well as the preprocessing steps performed on the
+datasets.
+
+\paragraph{CLEF}
+As part of the CLEF eHealth 2019~\cite{crestani2019experimental} challenge, the
+organizers provided a dataset consisting of 8,385 German non-technical summaries
+of animal experiments (NTS) sourced from the \textit{AnimalTestInfo}
+\cite{animaltestinfo} database. In order to comply with EU regulations,
+AnimalTestInfo tracks and publishes planned animal studies in Germany to provide
+greater transparency and increase the protection of animal welfare. NTS is a
+concise document that provides a description of the underlying assessment
+process and its findings in a manner that is easily comprehensible to the
+public. Each experiment includes a brief title, a description of expected
+benefits, and details on the pressures and harm inflicted on the animals.
+Additionally, the summaries outline strategies to minimize unnecessary harm and
+improve animal welfare. Experts annotated each summary using the German version
+of the ICD-10~\cite{graubner2013icd} classification system, with varying levels
+of detail, e.g. chapter, group. Approximately two-thirds of the experiments are
+labeled with a single disease, 10\% with multiple diseases, and the rest have no
+disease annotations. For each disease, the complete hierarchical path in the
+ICD-10 ontology is provided, including up to two parent groups and the chapter
+of the annotated disease. About two-thirds of the summaries are annotated with
+2-level paths, e.g. \texttt{I} and \texttt{B50-B64}, 20\% with 3- or 4-level
+paths, e.g. \texttt{IV} and \texttt{E70-E90,E10-E14} or \texttt{II} and
+\texttt{C00-C97,C00-C75,C15-C26}, and less than 1\% are annotated only with
+chapters, e.g. \texttt{VI}. Given that each NTS has received zero or more ICD-10
+codes as document-level label, we pose this corpus as a \textit{multi-label text
+classification} task. The dataset is divided into a stratified training and
+validation set of size 7,543 and 842, respectively~\cite{clef2019nts}. For the
+final evaluation, the organizers used a hold-out test set consisting of 407
+experiments~\cite{clef2019test}. To account for the highly imbalanced class
+distribution, we filtered out documents whose labels occurred less than 25
+times, similar to how it is done in~\cite{lentzen2022critical}. As a result, the
+number of documents and the number of classes were reduced to 5,688 and 230,
+respectively.
+
+\paragraph{JSynCC}
+The JSynCC corpus~\cite{lohr2018sharing} is the first publicly accessible
+dataset featuring synthetically generated medical documents written in German
+clinical language. It comprises 867 case reports made up by medical
+professionals for educational purposes, which are sourced from 10 medical
+textbooks. This approach allows for corpus publication without infringing on
+data privacy laws. In order to adhere to the copyrighted source material,
+instead of physical corpus distribution, JSynCC relies on sharing software to
+reconstruct identical copies of the corpus based on electronic versions of the
+source textbooks. Each case report is associated with one or more specialized
+medical fields, which makes this dataset well-suited for \textit{multi-label
+text classification} tasks. However, the class distribution is highly
+imbalanced, with most labels being represented only a few times. To address the
+scarcity of some classes, similar to the CLEF dataset, we only retained
+documents whose labels occurred at least 25 times, reducing the number of
+documents from 867 to 534 and the number of classes from 313 to 6:
+\textit{Trauma Surgery}, \textit{Ophthalmology}, \textit{Orthopedics},
+\textit{Emergency Medicine}, \textit{Traumatology} and \textit{Anesthesiology}.
+
+\subsection{Dataset Preparation}
+
+For all NER benchmarks, we utilized the \textsc{BigBIO}~\cite{fries2022bigbio}
+library for biomedical datasets to benefit from harmonized dataset schemas,
+standardized entity labels in the IOB2 format, and consistent tooling to access
+and ingest data into machine learning workflows. Regarding classification
+benchmarks, we used the \textsc{Huggingface Datasets} \cite{lhoest2021datasets}
+library, which provides a unified interface for accessing and processing
+datasets and forms the basis for \textsc{BigBIO}. Note that whenever available,
+the pre-assigned training, validation and test splits of the datasets were
+retained. For datasets without predefined splits, i.e. BRONCO150, CARDIO:DE and
+JSynCC, stratified random partitioning was performed, allocating 80\%, 10\% and
+10\% of the data for training, validation and testing, respectively.
+Fig.~\ref{fig:benchmark_stats} depicts the entity or class distribution among
+each dataset split for each benchmark. We exclude the CLEF eHealth 2019 dataset
+from this figure, as it contains 230 possible classes.

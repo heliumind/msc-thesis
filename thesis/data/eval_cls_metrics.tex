@@ -1,0 +1,20 @@
+% Prompt: Fill in the values in the tex table. The column for the column values in the csv is predict_micro_[precision, recall, f1]. Format the values in percent without the symbols i.e. xx.xx. The values belong in the tex table with row model_name and column data_name.
+
+\begin{tabular}{l ccc ccc}
+    \toprule
+    \multirow{2}{*}[-0.5\dimexpr \aboverulesep + \belowrulesep + \cmidrulewidth]{\bfseries Model} &
+    \multicolumn{3}{c}{\bfseries CLEF} &
+    \multicolumn{3}{c}{\bfseries JSynCC} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} 
+    & Prec. & Rec. & \ff & 
+    Prec. & Rec. & \ff \\
+    \midrule
+    \ChristBERT & 78.12 & 75.34 & 76.03 & 89.01 & \textbf{100} & \underline{94.19} \\
+    \ChristBERT\textsubscript{scratch} & \textbf{93.68} & 85.17 & \underline{89.22} & \underline{91.86} & 97.53 & \textbf{94.61} \\
+    \ChristBERT\textsubscript{BPE} & 88.22 & \underline{88.35} & 88.28 & 89.53 & 95.06 & 92.22 \\
+    medBERT.de & 89.21 & 87.59 & 88.40 & 91.25 & 90.12 & 90.68 \\
+    BioGottBERT & 88.30 & 87.90 & 88.10 & 88.89 & \underline{98.77} & 93.57 \\
+    GeistBERT & \underline{90.43} & 72.92 & 80.74 & \textbf{92.59} & 92.59 & 92.59 \\
+    GeBERTa & 88.91 & \textbf{89.71} & \textbf{89.31} & \textbf{92.59} & 92.59 & 92.59 \\
+    \bottomrule
+\end{tabular}

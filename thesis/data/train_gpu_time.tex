@@ -1,0 +1,13 @@
+\begin{tabular}{lclcc}
+    \toprule
+    \multirow{2}{*}{\bfseries Model} &
+    \bfseries Computation Time &
+    \multicolumn{2}{c}{\multirow{2}{*}{\bfseries GPUs}} &
+    \multirow{2}{*}{\bfseries VRAM} \\
+    & (DD:HH:MM) & & & \\
+    \midrule
+    \ChristBERT{} & 6:20:09 & 4 $\times$ A100 SXM && 80 GB \\
+    \ChristBERT\textsubscript{scratch} & 6:19:13 & 4 $\times$ A100 SXM && 80 GB \\
+    \ChristBERT\textsubscript{BPE} & 7:09:12 & 2 $\times$ H100 && 93 GB \\
+    \bottomrule
+\end{tabular}

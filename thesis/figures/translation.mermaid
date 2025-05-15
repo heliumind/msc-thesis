@@ -1,0 +1,16 @@
+flowchart TD
+    A[(PostgreSQL)]
+    
+    A -- "Pubmed Parser" --> B["Extract title, abstract, full-text, language"]
+    
+    B --> C{"Article Language"}
+    
+    C -- "English" --> D["Select articles from Q3-Q4 2020"]
+
+    D --> E["Filter articles >= 40 chars, no LaTeX"]
+
+    E -- "NLLB 200 1.8 B distlled" --> F["Translate to German"]
+    
+    C -- "German" --> H
+    
+    F --> H["final PMC Dataset "]

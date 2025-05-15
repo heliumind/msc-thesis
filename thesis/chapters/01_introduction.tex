@@ -1,0 +1,234 @@
+\chapter{Introduction} \label{chap:introduction}
+
+The digitization of health services and clinical processes has resulted in the
+healthcare industry generating an ever-increasing amount of textual data,
+encompassing electronic health records, clinical notes, medical reports, and
+discharge letters among many others. While structured data is frequently used
+for health economics and registries, the aforementioned unstructured clinical
+narratives are preferred by physicians to record patients' clinical information
+due to their flexibility and efficiency, and make up to 40\% of the data
+generated in current hospital systems~\cite{wang2018clinical,
+dalianis2009stockholm}. The substantial potential of narrative text data to
+support clinical applications was recognized early~\cite{sager1994natural,
+borst1991textinfo,friedman1995architectural} and more recently, research efforts
+have been directed towards developing medical applications assisted by
+artificial intelligence (AI). Prominent applications include decision support
+systems that assist healthcare professionals in their tasks, alleviating their
+workload and providing better treatments for patients~\cite{zhou2022natural}.
+
+However, the unstructured nature of textual data and the intricacies of the
+biomedical field pose significant challenges for leveraging its potential. In
+such a context, natural language processing (NLP) methods could structure that
+information to support downstream clinical applications. Recent advancements in
+NLP brought about by large-scale pre-trained language models based on the
+Transformer~\cite{vaswani2017attention} architecture, present new possibilities
+for extracting and analyzing the knowledge contained within the clinical texts.
+Through extensive self-supervised training on vast corpora of text, a model can
+acquire valuable representations of a language, producing highly effective
+language models. 
+
+The success of Transformer-based models like BERT (Bidirectional Encoder
+Representations from Transformers)~\cite{devlin2019bert} and its improved
+version RoBERTa~\cite{liu2019roberta}, can be largely attributed to the use of
+transfer learning expressed in the pretrain-finetune paradigm. In this paradigm,
+a model initially goes through a resource-demanding training process, i.e.
+\textit{pre-training}, using general-purpose textual data to learn the language
+structure. This pre-training phase is self-supervised, eliminating the need for
+labeled data by utilizing objectives like masked language
+modeling~\cite{devlin2019bert}. The model is then \textit{fine-tuned} for
+various tasks through a second, more cost-effective training round using a
+smaller, labeled, and task-specific dataset that adjusts the model's weights to
+fit the specific task and application domain at hand.  
+
+Direct application of general-purpose language models to a specific domain
+result in suboptimal performance due to significant distributional differences
+between general and target domains. Even within the same language,
+domain-specific language can vary significantly from everyday language, leading
+to the need of domain-specific models~\cite{arefeva2022tourbert}. This
+particularly holds for the medical domain, where the language is highly
+specialized and complex. Medical language features numerous acronyms that are
+crucial for saving time and space, yet they can be ambiguous and require context
+to be understood. Spelling errors are common, and there is an abundance of
+abbreviations~\cite{tayefi2021challenges}. Moreover, the medical vocabulary is
+highly specialized, as it is not typically used in everyday language, making it
+unfamiliar to those outside the medical profession. When the target domain, such
+as medicine, differs considerably from the pre-training data, models can be
+improved by an additional phase of domain-adaptive training using large,
+domain-specific corpora with the same pre-training objectives. 
+
+Such specifically designed medical language models hold significant promise for
+enhancing the efficiency and precision of medical document
+handling~\cite{beltagy2019scibert, huang2019clinicalbert, peng2019transfer,
+lee2020biobert}. For the German medical domain, the effectiveness of such models
+has been demonstrated by Bio-GottBERT~\cite{lentzen2022critical} and
+medBERT.de~\cite{bressem2024medbert}. However, the availability of open-source
+biomedical corpora large enough for domain adaptation is limited, primarily due
+to the sensitive nature of health-related data, and is largely confined to the
+English language, given its established status as the language of science.
+Despite these obstacles, advancing medical language models remains crucial, as
+they have the potential to manage the large volumes of text produced in
+hospitals every day.
+
+\section{Related Work}
+
+Past developments in medical NLP research have seen the creation of mature
+systems for extracting information from English clinical texts like
+MetaMap~\cite{aronson2010overview}, cTAKES~\cite{savova2010mayo},
+MedLEE~\cite{friedman1995architectural, friedman2000broad} and
+CLAMP~\cite{soysal2018clamp}, which have been widely deployed in clinical
+settings. These systems have been used for various tasks such as named entity
+recognition (NER), relation extraction, and information retrieval. Additionally,
+open competitions such as Informatics for Integrating Biology and the Bedside
+(i2b2)~\cite{uzuner20112010}, National NLP Clinical Challenges
+(n2c2)~\cite{henry20202018, stubbs2019cohort}, and CLEF eHealth
+\cite{crestani2019experimental} challenge from the Conference and Labs of the
+Evaluation Forum (CLEF) promote data and model sharing, further advancing the
+medical NLP field. The systems developed to date encompass rule-based,
+machine-learning-based, and hybrid models. While rule-based methods were
+essential in early developments, the performance of these systems is limited by
+their reliance on hand-crafted rules and lexicons, which are difficult to
+maintain and generalize across different clinical settings. 
+
+In order to overcome these challenges, current research emphasizes
+machine-learning techniques. In particular, deep-learning approaches like
+recurrent neural networks and convolutional neural networks have been widely
+used in recent years due to their ability to achieve superior performance with
+adequate training data. Unlike traditional machine-learning methods, deep neural
+networks typically use methods such as Word2Vec~\cite{mikolov2013distributed},
+GloVe~\cite{peters2018dissecting}, or FastText~\cite{joulin2017bag} to represent
+words as vectors. These methods create word embeddings by learning relationships
+between words from large text corpora, eliminating the need for manual feature
+engineering. Nevertheless, these methods represent all possible meanings of a
+word in a single vector, making them unable to distinguish between different
+word senses based on the surrounding context. Vaswani et al.
+\cite{vaswani2017attention} introduced a new model able to provide
+contextualized word representation called the Transformer. Originally designed
+for neural machine translation, the Transformer addresses two limitations of
+RNNs: lack of parallelization and handling of long-range dependencies. It relies
+on the self-attention mechanism, which differentially weighs parts of the input.
+Since it operates without recurrence, it is more parallelizable and
+computationally efficient than RNNs.
+
+In 2019, Devlin et al.~\cite{devlin2019bert} utilized parts of the original
+Transformer architecture to develop BERT, achieving state-of-the-art results in
+numerous NLP tasks. Performance of these large-scale language models heavily
+depends on the underlying data used for pre-training. A homogeneous text corpus
+generally leads to a poorer performing model compared to one trained on diverse
+text corpora of high variance~\cite{martin2020camembert}. Initially, much of
+BERT research was conducted with English texts, followed by efforts in
+multilingual approaches~\cite{conneau2020unsupervised}. While multilingual
+models were trained on extensive texts from numerous languages, it has been
+shown that single language models outperform these and are even beneficial in
+terms of efficiency, pre-training efforts, and downstream task performance as
+they demand fewer computational resources and smaller datasets compared to the
+extensive and diverse data required for multilingual
+models~\cite{scheible2020gottbert, chan2020german, martin2020camembert}. In
+particular, single-language models trained with the Open Super-large Crawled
+ALMAnaCH coRpus (OSCAR)~\cite{suarez2019asynchronous} demonstrated strong
+performance, benefiting from the corpus's size and variability. Notable examples
+include CamemBERT~\cite{martin2020camembert} for French,
+GottBERT~\cite{scheible2020gottbert} for German, and BERTje~\cite{de2019bertje}
+for Dutch.
+
+With the widespread adoption of Transformers in NLP tasks across various fields,
+a trend towards domain-adapted language representation models has emerged. By
+continuing the pre-training of models on in-domain data, researchers have been
+able to improve the performance of models on specific tasks. In the biomedical
+field, the pioneering and most recognized pre-trained model is
+BioBERT~\cite{lee2020biobert}, which shares the same architecture as BERT.
+Following a domain-adaptation strategy, BioBERT starts with BERT weights
+pre-trained on general texts and then refines these weights using biomedical
+corpora, surpassing the original model and achieving state-of-the-art
+performance in numerous biomedical text mining tasks, such as clinical concept
+recognition, gene-protein relation extraction, and biomedical question
+answering. To gather sufficient open-source biomedical data, the authors
+utilized repositories like PubMed~\cite{white2020pubmed} and PMC~\cite{pmcoa},
+obtaining 4.5 billion words from abstracts and 13.5 billion words from full-text
+articles. A similar method is employed by SciBERT~\cite{beltagy2019scibert},
+which retains the original BERT configuration but substitutes the initial
+general corpora with 1.14 million scientific articles randomly chosen from
+Semantic Scholar. This dataset consists of 82\% broad biomedical domain papers
+and 18\% computer science domain papers. By training from the ground up on
+biomedical data, SciBERT can utilize a custom dictionary that better represents
+the domain-specific word distribution. Med-BERT, introduced
+by~\cite{liu2021med}, is the first model fully trained on hospital data,
+particularly semi-structured electronic health records, leading to enhanced
+performance in subsequent prediction models. These approaches have since been
+refined, either by updating the model architecture to use BERT variants or by
+expanding the biomedical corpus with additional sources beyond scientific
+literature~\cite{huang2019clinicalbert, peng2019transfer}.
+
+The extensive range of biomedical and clinical BERT-based models benefit from
+the abundance of publicly available biomedical data in English, such as
+MIMIC~\cite{johnson2023mimic,johnson2023mimicnote}, the largest open-access
+dataset of medical records, and extensive repositories of biomedical scientific
+literature~\cite{white2020pubmed}. However, most other languages lack access to
+these valuable resources, making it challenging to achieve the same level of
+performance as their English counterparts. Despite this, researchers from
+various countries have endeavored to pre-train non-English biomedical models,
+utilizing local and often non-public biomedical text collections. They have
+either trained new models from scratch~\cite{akhtyamova2020named} or applied
+biomedical domain adaptation to multilingual~\cite{rubel2020biobertpt} or
+monolingual~\cite{copara2020contextualized} versions of BERT.
+
+For what concerns the German language, advancements in medical language models
+are significantly delayed and are often propelled solely by commercial software
+or localized applications~\cite{starlinger2017improve}. Stringent data
+protection laws impede data sharing, leading clinics to restrict data usage to
+internal purposes~\cite{hellrich2015sharing}. These obstacles hinder the sharing
+of datasets and models, as well as the organization of open challenges involving
+German datasets. In spite of these challenges, there have been notable
+initiatives in recent years: Datasets such as JSynCC~\cite{lohr2018sharing} and
+GGPONC~\cite{borchert2022ggponc} have been released, containing German
+biomedical language texts that are not subject to data protection concerns.
+Recently, the introduction of the BRONCO150~\cite{kittner2021bronco150} corpus,
+which includes de-identified discharge letters, and
+GPTNERMED~\cite{frei2023gptnermed}, which leverages large language models, has
+further expanded the availability of German medical text data. Additionally, the
+CLEF eHealth challenge in 2019 provided a dataset of non-technical summaries of
+animal studies to be classified according to the International Classification of
+Diseases and Related Health Problems (ICD-10)~\cite{clef2019nts, clef2019test,
+world1992icd}. A study by~\cite{sanger2019classifying} utilized the multilingual
+BERT version (mBERT) to classify these summaries, demonstrating that mBERT
+significantly outperformed a baseline Support Vector Machine model. To
+incorporate advances in general German language models,
+\cite{lentzen2022critical} introduced BioGottBERT, a model pre-trained on open
+medical German texts from Wikipedia and scientific abstracts, which demonstrated
+superior performance over its generalized counterpart GottBERT on medical tasks.
+Subsequently, the authors of~\cite{bressem2024medbert} proposed medBERT.de, in
+order to address the limited training data size and narrow scope on merely one
+medical subarea by using 3.8 million radiology reports, achieving promising
+results in classification tasks. While BioGottBERT was trained on a relatively
+small corpus slightly less than 1 GB of text, medBERT.de significantly expanded
+its training corpus to 10 GB, incorporating a wider variety of sources. However,
+its BERT architecture has been surpassed by its optimized version RoBERTa as
+recently demonstrated for German by the unpublished GeistBERT model. GeistBERT
+reiterated on GottBERT~\cite{scheible2020gottbert}, by using Whole Word Masking
+(WWM) and continued pre-training on a significantly more varied and larger
+general-domain corpus, thereby establishing state-of-the-art performance on
+various German NLP benchmarks.
+
+\section*{Objectives}
+In this work, we aimed to develop a new comprehensive German clinical language
+model based on the RoBERTa architecture by building upon the foundation laid by
+GeistBERT, hereinafter referred to as \textit{\ChristBERT}: \textbf{C}linical-
+and \textbf{H}ealthcare-\textbf{R}elated \textbf{I}ssues and \textbf{S}ubjects
+\textbf{T}uned BERT. The main emphasis of this work lies in the construction of
+a large German pre-training corpus, encompassing a diverse range of biomedical
+and clinical texts. These sources provided a broad spectrum of medical
+language data, ensuring the model’s robustness and applicability. In order to
+achieve this, we utilized a combination of mostly publicly available German
+medical textual data and synthetic German domain texts by augmenting the corpus
+with back-translated medical texts~\cite{edunov2018understanding}. This approach
+involves translating a monolingual corpus using neural machine translation
+models~\cite{ng2019facebook, costa2022no}, allowing us to leverage the vast
+amount of public English medical texts available. Based on the constructed
+corpus, we pre-trained \ChristBERT{} by using WWM and following three
+different domain-adaptation strategies: (1) continued pre-training, (2)
+pre-training from scratch, and (3) pre-training from scratch with additional
+prior vocabulary adaptation. In order to investigate the effects of the
+different domain-adaptation approaches, we evaluated the performance of the
+resulting models on two domain-specific downstream tasks: named entity
+recognition and classification. The downstream task performance has been
+thoroughly evaluated and compared to existing medical and general-purpose German
+language models.

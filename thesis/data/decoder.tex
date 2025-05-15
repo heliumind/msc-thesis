@@ -1,0 +1,17 @@
+\begin{tikzpicture}[
+    block/.style={draw, rectangle, minimum width=2cm, minimum height=2cm, text centered, font=\bfseries},
+    arrow/.style={->, >=latex, thick}
+]
+
+% Decoder block
+\node[block] (encoder) at (0, 0) {Decoder};
+
+% Tokens input
+\node at (0, -2) (tokens) {Tokens};
+\draw[arrow] (tokens) -- (encoder.south);
+
+% Embeddings output
+\node at (0, 2) (token) {Token};
+\draw[arrow] (encoder.north) -- (token);
+
+\end{tikzpicture}

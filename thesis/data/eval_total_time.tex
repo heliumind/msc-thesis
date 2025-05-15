@@ -1,0 +1,16 @@
+% Prompt: Fill in the values in the tex table. The column for the values in the csv are train_runtime for FT and total_runtime for PT . Format FT as hh:mm:ss (round up seconds). The values belong in the tex table with row model_name and column data_name.
+
+\begin{tabular}{l ccccc}
+    \toprule
+    \bfseries Model & \bfseries BRONCO150 & \bfseries CARDIO:DE & 
+    \bfseries GGPONC & \bfseries CLEF & \bfseries JSynCC \\
+    \midrule
+    \ChristBERT & 1:20:26 & 4:40:01 & 11:26:14 & 11:24:22 & 2:10:02 \\
+    \ChristBERT\textsubscript{scratch} & 1:28:28 & 5:14:12 & 10:47:27 & 12:16:22 & 2:30:59 \\
+    \ChristBERT\textsubscript{BPE} & 1:12:09 & 4:55:18 & 10:51:00 & 11:45:43 & 2:25:13 \\
+    medBERT.de & 1:57:32 & 4:31:53 & 11:25:21 & 12:53:27 & 2:13:56 \\
+    BioGottBERT & 1:18:15 & 6:01:10 & 10:55:55 & 12:50:17 & 2:03:28 \\
+    GeistBERT & 1:27:57 & 4:40:46 & 11:25:43 & 12:51:41 & 2:15:12 \\
+    GeBERTa & 1:57:32 & 7:39:51 & 19:22:22 & 29:15:23 & 3:09:10 \\
+    \bottomrule
+\end{tabular}

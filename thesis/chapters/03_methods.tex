@@ -1,0 +1,97 @@
+\section{Pre-Training} \label{sec:pre-training}
+
+Leveraging the created large-scale biomedical corpus as described in
+Sec.~\ref{sec:corpus} as well as the architectural foundation laid by the
+current state-of-the-art German general-purpose language model GeistBERT, we
+developed biomedical adaptations by following three main strategies:
+
+\paragraph{Continued pre-training} 
+Starting from the checkpoint of GeistBERT, we initialize a RoBERTa base model
+with the identical weights and general domain vocabulary. Subsequently, all
+parameters of the model are retrained on our 13.5 GB training data as listed in
+Tab.~\ref{tab:corpus_stats}. Essentially, this approach is equivalent to
+extending GeistBERT's pre-training dataset with the new data, which is why this
+strategy is known as \textit{continued} pre-training. The created model
+following this approach will be referred to as \textbf{\ChristBERT}. 
+
+\paragraph{Pre-training from scratch}
+We also explored the possibility of pre-training a RoBERTa model from scratch
+using the same architecture and vocabulary as GeistBERT, but without any
+initialization from the general domain model. As a result, this model solely
+learns language representations from our biomedical corpus. We denote this model
+as \textbf{\ChristBERT\textsubscript{scratch}}.
+
+\paragraph{Vocabulary adaptation}
+In order to study the impact of a domain-specific vocabulary, this strategy
+involves the creation of a new vocabulary based on the created biomedical corpus
+and follows the same pre-training process as \ChristBERT\textsubscript{scratch}.
+The vocabulary is generated analogously to GeistBERT and outlined in
+Sec.~\ref{subsec:bbpe}, which uses a byte-level BPE vocabulary with a target
+size of 52,000 tokens. The resulting model is referred to as
+\textbf{\ChristBERT\textsubscript{BPE}}. \\
+
+Each of the three models was pre-trained using the \textsc{fairseq}
+\cite{ott2019fairseq} framework on the domain-specific corpus from
+Sec.~\ref{sec:corpus}, which amounts to 13.5 GB of uncompressed text data. The
+documents comprising the training data, as listed in Tab.~\ref{tab:corpus_stats}
+were shuffled in order to improve pre-training robustness. The models underwent
+training for 100,000 update steps with a batch size of 8,192, utilizing weight
+initialization based on one of the three previously outlined strategies. We
+adapted GeistBERT's pre-training configuration, which closely aligns with
+RoBERTa's standard training setup~\cite{liu2019roberta}, encompassing dynamic
+masking for the WWM learning objective, \textit{AdamW} optimizer parameters, and
+a fixed sequence length of 512 tokens. To comply with the maximum input sequence
+length of the model, full sentences from multiple documents in the pre-training
+corpus were packed into text segments according to the \textbf{Full-Sentences}
+procedure as described in Sec.~\ref{sec:roberta}. This procedure allows for
+retention of natural sentence structure despite the use of fixed-length
+sequences. For efficient data access, the \textsc{fairseq} library converts the
+input data into a binary format and utilizes memory-mapped file I/O. A warmup
+phase of 10,000 iterations was implemented, gradually increasing the learning
+rate to a maximum of \num{7e-4} for \ChristBERT{} and \num{6e-4} for
+\ChristBERT\textsubscript{scratch} and \ChristBERT\textsubscript{BPE}, followed
+by a polynomial decay to zero. The complete pre-training procedure was performed
+on clusters equipped with either four Nvidia A100 interconnected via SXM or two
+Nvidia H100 GPUs. The cumulative training time for the three models amounted to
+approximately 21.7 days (refer to Tab.~\ref{tab:train_gpu_time} in the
+Appendix).
+
+\section{Language Modeling Evaluation} \label{sec:lm_eval}
+
+One of the primary metrics used for evaluating the quality of a language model
+is \textbf{perplexity}~\cite{bengio2003neural}. Perplexity measures how well a
+probability model predicts unseen samples. In the context of language modeling,
+it quantifies the LM's ability to predict the next word in a sequence.
+Intuitively, good models are those that assign higher probabilities to unseen
+text (they are less surprised when encountering the new words). The perplexity
+(commonly abbreviated as ppl) of a model $\theta$ on a test set $\mathcal{W}$ is
+defined as the inverse probability that $\theta$ assigns to $\mathcal{W}$,
+normalized by the test set length. More formally, for a sequence of $n$ words
+$w_{1:n} = (w_1, \ldots, w_n)$, the perplexity is given by:
+
+\begin{align} \label{eq:ppl}
+    \text{ppl}_{\theta}(w_{1:n}) &= \Pr{}_{\theta}(w_{1:n})^{-\frac{1}{n}} \\
+                                 &= \sqrt[n]{\frac{1}{\Pr{}_{\theta}(w_{1:n})}}
+\end{align}
+
+We can use the chain rule of probability to express the perplexity of a sequence
+of words as the product of the probabilities of each word given its preceding
+words:
+
+\begin{equation}
+    \text{ppl}_{\theta}(w_{1:n}) = 
+    \sqrt[n]{\prod_{i=1}^{n} \frac{1}{\Pr{}_{\theta}(w_i | w_{1:i-1})}}
+\end{equation}
+
+Note that due to the inverse relationship in Eq.~\ref{eq:ppl}, higher
+probabilities assigned to word sequences correspond to lower perplexity values.
+Consequently, a model with lower perplexity indicates that it is a better
+predictor of the given test set. Minimizing perplexity is equivalent to
+maximizing the probability of the test set as predicted by the LM.
+
+It is crucial to note that when calculating perplexity, the LM must be developed
+without any exposure to the test set. Otherwise, the perplexity will be
+artificially low. Additionally, an important consideration is that perplexity is
+influenced by the length of the test data, making it highly sensitive to
+variations in the tokenization algorithm. As a result, perplexity as a measure
+is most effective when comparing two LMs sharing the same tokenizer.

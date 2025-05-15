@@ -1,0 +1,289 @@
+\subsection{Evaluation Metrics}
+Depending on the downstream task, different evaluation metrics are commonly used
+to assess the performance of models. Since both NER and text classification are
+framed as classification tasks, we focus on metrics for classification. In the
+context of model evaluation, the terms \textbf{True Positive}, \textbf{False
+Positive}, \textbf{True Negative} and \textbf{False Negative} are commonly
+used~\cite{sokolova2009systematic}. These are defined as follows:
+
+\begin{itemize}
+    \item \textbf{True Positive} (TP): positive samples that are predicted as
+    positive
+    \item \textbf{False Positive} (FP): negative samples that are predicted as
+    positive
+    \item \textbf{True Negative} (TN): negative samples that are predicted as
+    negative
+    \item \textbf{False Negative} (FN): positive samples that are predicted as
+    negative
+\end{itemize}
+
+The terminologies positive and negative simply refer to certain classes. A
+fundamental measure for classification evaluation is the \textbf{confusion
+matrix} which shows the relation between the predicted classes and the actual
+classes. Thus, the correct predictions as well as the model errors can be
+derived from this matrix. An example of such a confusion matrix in a
+\textit{binary classification} scenario is shown in
+Fig.~\ref{fig:confusion_matrix}.
+
+\begin{figure}[htbp]
+    \centering
+    \input{data/confusion_matrix}
+    \caption[Example of a confusion matrix for binary classification]{Example of
+    a confusion matrix for binary classification Class value 1 corresponds to
+    \textit{positive} and class value 2 to \textit{negative}.}
+    \label{fig:confusion_matrix}
+\end{figure}
+
+The diagonal shows the correctly predicted classes, while the off-diagonal cells
+the misclassified objects. The matrix shows the number of samples that fall into
+the given categories, with true positives and true negatives on the diagonal and
+false positives and false negatives on the off-diagonal. In the example of
+Fig.~\ref{fig:confusion_matrix}, 99\% of the data points from class 1 and 93\%
+of the samples from class 2 have been correctly classified. The respective
+relative frequency is often visualized through coloring of the corresponding
+cell. The darker the cell, the higher the number of data points predicted for an
+actual class. The ideal confusion matrix of a model in this example would have
+black cells on the diagonal and white cells in the remaining matrix. This would
+mean that all predicted classes correspond to the actual classes. Through this
+matrix representation, weaknesses of the model for certain classes can be
+unveiled.
+
+Such visually derived performance information from the confusion matrix can be
+expressed in numerical metrics, which we will define in the following. The
+ratio of the number of correct predictions over the total number of
+predictions is referred to as \textbf{accuracy} and can be formulated as
+follows:
+
+\begin{equation}
+    \text{Accuracy} = 
+    \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}}
+\end{equation}
+
+Evaluating a model solely on the accuracy metric can be misleading in cases of
+imbalanced datasets. Therefore, two more metrics, namely \textbf{recall} and
+\textbf{precision} can be incorporated to further analyze the performance of a
+given model. These two metrics evaluate the performance on the classes
+individually.
+
+\textbf{Recall} evaluates how well the model can find all objects of a given
+class. This can be mathematically formulated as:
+
+\begin{equation}
+    \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
+\end{equation}
+
+\textbf{Precision} on the other hand, measures how often a model is able to
+predict a given class correctly:
+
+\begin{equation}
+    \text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
+\end{equation}
+
+From the two latter metrics, the so-called \textbf{\ff{} score} can be computed.
+The \ff{} score is defined as the harmonic mean of precision and recall:
+
+\begin{equation} \label{eq:f1}
+    \text{\ff} = 2 \cdot 
+    \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation}
+
+We have seen classification metrics for binary classification so far. When
+expanding recall, precision and \ff{} to \textit{multi-class} and
+\textit{multi-label} classification scenarios (when more than two classes are
+present), we have to account for multiple sets of TP, FP, and FN for each class.
+As a result, we obtain different recall and precision values for each class. In
+order to compile the individual values into a single value, we can average the
+results. This is commonly done by averaging over the classes, i.e. \textbf{macro
+averaging}, or over the individual samples, i.e. \textbf{micro averaging}
+\cite{takahashi2022confidence}. Assuming $m$ classes and denoting the class
+index with $i ,\ \forall i \ 1 \leq i \leq m$, then the averaged metrics are
+defined as follows:
+
+\paragraph{Macro averaging}
+\begin{equation}
+    \text{Recall}_\text{macro} = \frac{1}{m} \sum_{i=1}^{m} 
+    \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}
+\end{equation}
+
+\begin{equation}
+    \text{Precision}_\text{macro} = \frac{1}{m} \sum_{i=1}^{m} 
+    \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}
+\end{equation}
+
+\paragraph{Micro averaging}
+\begin{equation} \label{eq:micro_prec}
+    \text{Recall}_\text{micro} = \frac{\sum_{i=1}^{m} \text{TP}_i}
+    {\sum_{i=1}^{m} \text{TP}_i + \sum_{i=1}^{m} \text{FN}_i}
+\end{equation}
+
+\begin{equation} \label{eq:micro_rec}
+    \text{Precision}_\text{micro} = \frac{\sum_{i=1}^{m} \text{TP}_i}
+    {\sum_{i=1}^{m} \text{TP}_i + \sum_{i=1}^{m} \text{FP}_i}       
+\end{equation}
+
+TP\textsubscript{i} corresponds to the i-th diagonal cell in the confusion
+matrix, FP\textsubscript{i} refers to the sum of the off-diagonal cell values of
+the i-th row, FN\textsubscript{i} is the sum of the off-diagonal elements of the
+i-th column~\cite{takahashi2022confidence}. The corresponding macro and micro
+averaged \ff{} score is computed by applying Eq.~\ref{eq:f1} to the respective
+recall and precision values. The averaging method should be chosen according to
+the specific use case. Macro averaging takes the mean across all classes and
+gives equal weight to each class. This is useful when working with imbalanced
+datasets, as it penalizes errors in all classes equally, regardless of their
+frequency. In contrast, micro averaging aggregates the contributions from all
+classes and is typically used when the errors in infrequent classes are less
+important compared to those in frequent classes~\cite{sokolova2009systematic}.
+ 
+
+% \paragraph{NER Evaluation}
+NER systems are typically evaluated using the \textbf{micro averaged \ff{}}
+score, as it has established itself as the standard metric reported in the
+literature and competitions, e.g. the CoNLL 2003 shared
+task~\cite{tjong2003introduction}. In NER datasets, the number of entities often
+follow a naturally imbalanced distribution, where some classes appear much more
+frequently than specialized entity types. Micro averaging effectively weights
+entity types according to their frequency in the dataset, which better reflects
+real-world performance expectations~\cite{harbecke2022only}. Furthermore, NER
+evaluation must consider both correct boundary detection and entity
+classification. The micro averaged \ff{} score provides a unified measure that
+captures both aspects by computing precision and recall based on the total
+counts of true positives, false positives, and false negatives across all entity
+types.
+
+% \paragraph{Text Classification Evaluation}
+For multi-label classification, evaluating prediction performance is inherently
+different, as each prediction is associated with a set of labels rather than a
+single label as in binary and multi-class classification. The quality of
+multi-label classification is assessed through either partial or complete class
+label matching~\cite{godbole2004discriminative}. The latter is often referred to
+as \textit{exact matching} and extends binary and multi-label metrics to
+multi-label classification by considering partially correct predictions as
+incorrect. The \textit{hamming loss} forms the middle ground and measures the
+fraction of wrongly predicted labels to the total number of labels. Both metrics
+are dominated by the majority class and thus are not suitable for imbalanced
+datasets. Given the significant class imbalance that the datasets used in this
+thesis exhibit (refer to Sec.~\ref{sec:cls_datasets}), we will consider another
+evaluation approach that incorporates fine-grained per-label statistics. This
+approach essentially reduces the multi-label classification to $m$ individual
+binary classification problems and evaluates the model's performance on each
+label independently. Following the same rationale as for the NER evaluation, we
+adopt the \textbf{micro-averaged \ff{}} score as introduced in
+Eq.~\ref{eq:micro_prec}-\ref{eq:micro_rec}, for assessing text classification
+performance. 
+
+\subsection{Experimental Setup}
+
+To assess performance, the fine-tuning experiments entailed a hyperparameter
+optimization on each downstream task, tuning for batch size and learning rate.
+Tab.~\ref{tab:hyperparams} shows the specific hyperparameters used to perform a
+grid search, resulting in a total of 28 trials per task. The batch size and
+learning rate sets are adapted from the evaluation setup of GeistBERT and were
+extended with additional learning rate values. In each individual trial, all
+benchmark datasets were fine-tuned with a warmup step ratio of 10\% for up to 30
+epochs. During the grid search, the best model checkpoint was selected per epoch
+based on the performance on the validation set of the downstream task. For NER
+and classification tasks, we report the \textit{micro averaged} precision,
+accuracy and \ff{} scores on each benchmark's test set. 
+
+\begin{table}[htb]
+    \centering
+    \input{data/hyperparameters}
+    \caption{Hyperparameters used in the grid search for the downstream tasks}
+    \label{tab:hyperparams}
+\end{table}
+
+In contrast to perplexity as discussed in Sec.~\ref{sec:lm_eval}, downstream
+task evaluation allow for a direct comparison of model efficacy across different
+architectures and domains. Thus, we chose current state-of-the-art (SOTA) German
+language models as baselines to benchmark the \ChristBERT{} models against,
+including two domain-specific and two general-purpose Transformer models (refer
+to Tab.~\ref{tab:models}). To facilitate performance comparison, all model and
+downstream task combinations underwent the same hyperparameter tuning and
+evaluation process as described above. The following provides a brief overview
+of each model, with further design differences shown in
+Tab.~\ref{tab:model_props} in the Appendix.
+
+\begin{table}[htb]
+    \centering
+    \input{data/models}
+    \caption[Architecture, domain, and corpus size of evaluated models]{
+    Architecture, domain, and corpus size of evaluated models. For \ChristBERT,
+    BioGottBERT and GeistBERT, corpus size indicates the size of the initial +
+    continuous pre-training corpus.}
+    \label{tab:models}
+\end{table}
+
+\paragraph{medBERT.de} is based on the BERT~\cite{devlin2019bert} base
+architecture and is specialized for the German medical domain. Similar to
+\ChristBERT\textsubscript{BPE}, it was trained from scratch with a custom
+domain-specific vocabulary on a large and diverse 10.3 GB corpus, comprising 4.7
+million German medical documents from eleven different sources, including
+articles from the German health web, scientific texts, medical books, and
+real-world clinical data such as electronic health records and radiology reports
+from Charité University Hospital. This substantial dataset translated into SOTA
+performance on various medical benchmarks, particularly for longer and more
+complex texts, such as NER and ICD-10 chapter classification from radiology
+discharge summaries and surgical reports.
+
+\paragraph{BioGottBERT} is a domain-adapted version of the unfiltered base
+variant of the general German language model
+GottBERT~\cite{scheible2020gottbert}, which itself is a RoBERTa-based model
+trained on the German portion of the OSCAR~\cite{suarez2019asynchronous} corpus
+(145 GB of general text). Similar to \ChristBERT, BioGottBERT was merely
+\textit{continuously pre-trained} on biomedical German texts, specifically from
+Wikipedia, scientific abstracts and drug leaflets. Despite being trained on a
+relatively modest biomedical corpus of 809 MB, BioGottBERT demonstrated notable
+improvements over its general-domain counterpart on a variety of medical NLP
+tasks, including NER and classification problems. Our choice of evaluation
+benchmarks closely aligns with the evaluation setup of BioGottBERT, which in
+combination with an identical tokenizer to \ChristBERT{} allows for a direct
+comparison of performance.
+
+\paragraph{GeistBERT} is a general German language model utilizing the RoBERTa
+base architecture. Following the \textit{continued pre-training} approach, it
+was initialized with the best checkpoint of filtered GottBERT
+\cite{scheible2020gottbert} (with 94,530 steps) and incrementally trained for
+another 100,000 steps using Whole Word Masking (WWM) on a large-scale 1.3 TB
+sized corpus consisting of partially deduplicated contemporary German
+datasets~\cite{nguyen2023culturax, tiedemann2012parallel}. These include
+massively crawled web data in addition to publicly accessible legal texts.
+GeistBERT achieves SOTA performance, outperforming even larger models in German
+NER, classification and natural language inference tasks. Further,
+Longformer~\cite{beltagy2020longformer} and
+Nyströmformer~\cite{xiong2021nystromformer} variants were derived, supporting
+longer input sequences up to 8,000 tokens. As the general-domain counterpart of
+the \ChristBERT{} models, GeistBERT was included to assess the impact of
+domain-specific pre-training on downstream performance.
+
+\paragraph{GeBERTa} is another general-domain model, but it utilizes the DeBERTa
+\cite{he2021deberta} base architecture, which incorporates \textit{disentangled
+attention} mechanisms for improved contextual understanding. Trained on 167 GB
+of cross-domain German texts ranging from formal, informal, legal, medical and
+literature data, the model performance was evaluated on general and medical NER,
+sentiment and hate-speech detection as well as question-answering tasks. GeBERTa
+offers a different architectural perspective compared to RoBERTa-based models
+and is included to assess the impact of model architecture and cross-domain
+pre-training data on downstream performance in both general and domain-specific
+downstream tasks.
+
+\subsubsection{Implementation Details}
+
+The fine-tuning experiments were implemented utilizing the \textsc{Huggingface
+Transformers}~\cite{wolf2020transformers} Python library and the \textsc{Neural
+Network Intelligence}~\cite{nni} framework for hyperparameter tuning. The choice
+of libraries was reinforced by their native support for the dataset
+implementations~\cite{fries2022bigbio,lhoest2021datasets}. For classification,
+model inputs were tokenized with truncation to, and padding up to the maximum
+length of 512 tokens. In the case of NER, longer sequences were split into one
+or more sequences of 64 tokens except for GGPONC, which was split into 128
+tokens. These values correspond to the 95-th percentile of the sequence lengths
+across each dataset's training, validation and test splits. The evaluation
+metrics were computed using the \textsc{seqeval}~\cite{seqeval} Python library
+for NER and the \textsc{sklearn}~\cite{pedregosa2011scikit} Python library for
+classification. In \textsc{seqeval}, \textit{strict} evaluation mode was
+applied, measuring both the correctness of the entity boundary and the entity
+class. All experiments were conducted on consumer-grade hardware, specifically
+an NVIDIA RTX 3090 GPU with 24 GB VRAM, ensuring reasonable training times for
+practitioners. The total computation time for all experiments encompassing all
+35 model-dataset combinations, amounted to approximately 6.74 days (refer to
+Tab.~\ref{tab:eval_total_time} in the Appendix).

@@ -1,0 +1,33 @@
+\chapter{\abstractname}
+
+Digital healthcare nowadays generates vast amounts of clinical texts that hold
+potential for many emerging AI applications in patient care. Recent advances in
+natural language processing (NLP) through Transformer-based language models like
+BERT and RoBERTa provide capabilities to extract and analyze information from
+these clinical texts. Performing domain adaptation on these models has proven
+essential for specialized fields like medicine where terminology and linguistic
+patterns differ from general language. However, the availability of large text
+corpora needed for domain adaptation is limited for the German language due to
+strict data protection regulations. Moreover, current German medical language
+models either use the original BERT architecture or were trained on insufficient
+data, potentially limiting their performance. This thesis aims to reduce these
+gaps by developing novel German biomedical domain-specific language models based
+on the RoBERTa base architecture, while employing translation-based data
+augmentation on large English-language clinical corpora to address data
+scarcity. For this purpose, we curated a 13.5 GB corpus which encompasses
+scientific literature, clinical notes and crawled online content from the German
+health web. To assess the efficacy of the developed models, we evaluated their
+performance on three medical named entity recognition and two text
+classification tasks against four existing German general-purpose and medical
+language models. Furthermore, the effect of different domain adaptation
+strategies on task performance was investigated: continued pre-training,
+pre-training from scratch, and pre-training with domain-specific vocabulary. In
+our experimental setup, the developed models outperform the baseline models
+across four out of five tasks, establishing a new state-of-the-art for the
+German clinical language. Our findings indicate that the optimal domain
+adaptation strategy is task-dependent and remains crucial, as adapted models
+consistently outperformed general-purpose language models in our experiments.
+Based on the empirical results, pre-training from scratch is effective for
+highly specialized clinical texts, whereas continued pre-training is suited for
+more commonly written medical texts. To support the German medical NLP
+community, the developed models are made publicly available.

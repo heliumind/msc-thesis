@@ -1,0 +1,59 @@
+\def\myConfMat{{
+    {1620,  100},
+    {   13,1300},
+    }}
+\def\classNames{{"A","B"}}
+
+\def\numClasses{2}
+
+\def\myScale{1.3}
+\begin{tikzpicture}[
+    scale = \myScale,
+    ]
+
+\tikzset{vertical label/.style={rotate=90,anchor=east}}
+\tikzset{diagonal label/.style={rotate=45,anchor=north east}}
+
+\foreach \y in {1,...,\numClasses} %loop vertical starting on top
+{
+    % Add class name on the left
+    \node [anchor=east] at (0.4,-\y) {\y};
+    \foreach \x in {1,...,\numClasses}
+    {
+%---- Start of automatic calculation of totSamples for the column ------------   
+    \def\totSamples{0}
+    \foreach \ll in {1,...,\numClasses}
+    {
+        \pgfmathparse{\myConfMat[\ll-1][\x-1]}   %fetch next element
+        \xdef\totSamples{\totSamples+\pgfmathresult} %accumulate it with previous sum
+    }
+    \pgfmathparse{\totSamples} \xdef\totSamples{\pgfmathresult}  % put the final sum in variable
+%---- End of automatic calculation of totSamples ----------------
+    
+    \begin{scope}[shift={(\x,-\y)}]
+        \def\mVal{\myConfMat[\y-1][\x-1]} % The value at index y,x (-1 because of zero indexing)
+        \pgfmathtruncatemacro{\r}{\mVal}   %
+        \pgfmathtruncatemacro{\p}{round(\r/\totSamples*100)}
+        \coordinate (C) at (0,0);
+        \ifthenelse{\p<50}{\def\txtcol{black}}{\def\txtcol{white}} %decide text color for contrast
+        \node[
+            draw,                 %draw lines
+            text=\txtcol,         %text color (automatic for better contrast)
+            align=center,         %align text inside cells (also for wrapping)
+            fill=black!\p,        %intensity of fill (can change base color)
+            minimum size=\myScale*10mm,    %cell size to fit the scale and integer dimensions (in cm)
+            inner sep=0,          %remove all inner gaps to save space in small scales
+            ] (C) {\r\\\p\%};     %text to put in cell (adapt at will)
+        %Now if last vertical class add its label at the bottom
+        \ifthenelse{\y=\numClasses}{
+        \node [] at ($(C)-(0,0.75)$) % can use vertical or diagonal label as option
+        {\x};}{}
+    \end{scope}
+    }
+}
+%Now add x and y labels on suitable coordinates
+\coordinate (yaxis) at (-0.3,0.5-\numClasses/2);
+\coordinate (xaxis) at (0.5+\numClasses/2, -\numClasses-1.25);
+\node [vertical label] at (yaxis) {Predicted Class};
+\node []               at (xaxis) {Actual Class};
+\end{tikzpicture}

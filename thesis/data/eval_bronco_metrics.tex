@@ -1,0 +1,22 @@
+% Prompt: Fill in the values in the tex table. The column for the column values in the csv is predict_[entity]_(prediction, recall, \ff). Format the values in percent without the symbols i.e. xx.xx. The values belong in the tex table with row model_name.
+
+\begin{tabular}{l ccc ccc ccc}
+    \toprule
+    \multirow{2}{*}[-0.5\dimexpr \aboverulesep + \belowrulesep + \cmidrulewidth]{\bfseries Model} &
+    \multicolumn{3}{c}{\bfseries Diagnosis} &
+    \multicolumn{3}{c}{\bfseries Medication} &
+    \multicolumn{3}{c}{\bfseries Treatment} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+    & Prec. & Rec. & \ff & 
+    Prec. & Rec. & \ff & 
+    Prec. & Rec. & \ff \\
+    \midrule
+    \ChristBERT & \underline{79.78} & \textbf{81.56} & \underline{80.66} & 85.71 & 81.36 & 83.48 & 81.89 & 83.87 & 82.87 \\
+    \ChristBERT\textsubscript{scratch} & 78.89 & 79.33 & 79.11 & \underline{87.50} & 83.05 & \underline{85.22} & \underline{83.59} & \underline{86.29} & \underline{84.92} \\
+    \ChristBERT\textsubscript{BPE} & \textbf{82.63} & \underline{80.00} & \textbf{81.29} & \textbf{88.41} & 84.72 & \textbf{86.52} & \textbf{88.82} & \textbf{88.82} & \textbf{88.82} \\
+    medBERT.de & 75.35 & 75.35 & 75.35 & 85.71 & 83.33 & 84.51 & 80.13 & 84.03 & 82.03 \\
+    BioGottBERT & 72.07 & 72.07 & 72.07 & 83.33 & \underline{84.75} & 84.03 & 80.77 & 84.68 & 82.68 \\
+    GeistBERT & 74.05 & 76.54 & 75.27 & 81.25 & \textbf{88.14} & 84.55 & 75.19 & 80.65 & 77.82 \\
+    GeBERTa & 75.35 & 75.35 & 75.35 & 85.71 & 83.33 & 84.51 & 80.13 & 84.03 & 82.03 \\
+    \bottomrule
+\end{tabular}

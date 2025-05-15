@@ -1,0 +1,200 @@
+\chapter{Discussion} \label{chap:discussion}
+
+In this chapter, we summarize the main findings of our experiments and discuss
+them in relation to the three investigated domain adaptation strategies in
+Sec.~\ref{sec:findings}. We then contextualize our findings with other study
+outcomes in the field of biomedical NLP in Sec.~\ref{sec:prior_work}. Finally,
+Sec.~\ref{sec:limitations} reflects on the limitations of our study and suggests
+directions for future research.
+
+\section{General Findings} \label{sec:findings}
+
+In this study, we systematically explored three complementary strategies for
+domain adaptation of German biomedical language models: continued pre-training
+from a general-domain model (\ChristBERT{}), pre-training from scratch
+(\ChristBERT\textsubscript{scratch}), and vocabulary adaptation via
+domain-specific subword tokenization (\ChristBERT\textsubscript{BPE}). All
+models were pre-trained on a newly curated 13.5 GB biomedical corpus and
+evaluated on downstream biomedical tasks, including named entity recognition
+(NER) and text classification. Our experiments reveal several principal findings
+regarding the three investigated domain adaptation strategies.
+
+First, continued pre-training proved particularly effective in terms of
+efficiency. \ChristBERT{} achieved the lowest perplexity and converged fastest,
+underscoring the benefits of leveraging general-domain knowledge. This
+advantage, however, did not always translate into downstream superiority for
+initializing biomedical models. Instead, its performance varied among downstream
+tasks: While \ChristBERT{} excelled in NER, particularly on GGPONC, it ranked
+lowest on complex classification tasks such as CLEF, indicating that inherited
+general-domain priors may not always be beneficial for complex classification
+tasks.
+
+Second, pre-training from scratch led to robust and often superior downstream
+performance. \ChristBERT\textsubscript{scratch} achieved top results on text
+classification tasks, particularly JSynCC, where it attained the highest \ff{}
+score. This suggests that domain-exclusive representations learned from scratch
+may offer advantages in classification scenarios requiring broader semantic
+coverage and contextual generalization.
+
+Third, domain-specific vocabulary adaptation (\ChristBERT\textsubscript{BPE})
+yielded the strongest performance for entity-centric tasks. Despite higher
+perplexity during pre-training, this variant excelled in NER tasks across all
+datasets, achieving state-of-the-art results on BRONCO150 and CARDIO:DE.
+However, its performance in classification tasks was less competitive,
+indicating that the benefits of domain-optimized tokenization are most
+pronounced in tasks sensitive to terminological precision and morphological
+complexity.
+
+Finally, comparisons to general-purpose language models highlighted the
+importance of domain adaptation. While general models such as GeistBERT and
+GeBERTa remained competitive on certain datasets like CARDIO:DE and CLEF, they
+were consistently outperformed by the \ChristBERT{} variants on more specialized
+or complex biomedical tasks. Furthermore, smaller-scale domain adaptation
+efforts (e.g., BioGottBERT) could not match the performance gains achieved
+through our larger corpus and comprehensive pre-training strategies.
+
+In summary, our findings emphasize that no single adaptation strategy
+universally outperforms the others. Continued pre-training offers rapid
+convergence and strong generalization. From-scratch pre-training provides robust
+performance for classification, while additional domain-specific vocabulary is
+most beneficial for specialized tasks like NER. Our results highlight that the
+suitability of domain-specific tokenization strategies, such as a custom BPE
+vocabulary, is highly task-dependent. This suggests that domain-specific BPE
+tokenization is especially beneficial for entity recognition, where accurate
+boundary detection and handling of rare terms are critical. In contrast,
+classification tasks often rely more on the model's ability to generalize over
+broader semantic and syntactic patterns rather than fine-grained tokenization.
+Thus, in such contexts, the rigid subword splits introduced by domain-specific
+BPE may offer less benefit, or even introduce unnecessary complexity. These
+observations emphasize the importance of aligning vocabulary adaptation
+strategies not only with the domain but also with the linguistic properties and
+demands of the target task.
+
+\section{Findings in the Context of Prior Work} \label{sec:prior_work}
+
+Our findings align well with and extend previous work on domain-adaptive
+pre-training. The study~\cite{gururangan2020don} demonstrated that continued
+pre-training yields significant gains for domain-specific tasks, especially when
+the target domain is distant from the original pre-training corpus. Our results
+confirm this for German biomedical NLP: continued pre-training (\ChristBERT) led
+to rapid convergence and strong performance in complex NER tasks like GGPONC.
+Furthermore, previous findings from~\cite{el2022re} suggest that training from
+scratch can be competitive with, or even outperform, continued pre-training on
+biomedical classification tasks. Our \ChristBERT\textsubscript{scratch} model
+demonstrated this by excelling on both the JSynCC and CLEF classification
+benchmarks. In their experiments, the authors of~\cite{el2022re} also observed
+that medical-specific vocabularies lead to performance gains in downstream
+domain tasks. Our results mirror these prior observations, with
+\ChristBERT\textsubscript{BPE} achieving top results in NER, reinforcing the
+idea that domain-aligned vocabulary improves handling of specialized
+terminology.
+
+Inspired by~\cite{edunov2018understanding}, we translated English medical texts
+into German to address the scarcity of native-language biomedical corpora. This
+strategy proved effective in terms of downstream task performance compared to
+medBERT.de~\cite{bressem2024medbert}, which relied exclusively on original
+German data. GeBERTa~\cite{dada2023impact}, which also leveraged translated
+medical texts, achieved similarly strong results, particularly in classification
+scenarios. Notably, even general-purpose models performed competitively on
+classification tasks, underscoring that large-scale general-domain pre-training
+enriched with some biomedical content remains a viable approach for such tasks.
+Nevertheless, our findings support the approach of translation-based corpus
+construction, especially for tasks like biomedical NER, where domain-specific
+nuances and terminology require targeted representation learning and original
+German resources remain limited.
+
+While implementing the translation strategy for MIMIC-IV with LLaMA 3.1 and
+Pubmed Central with NLLB 200, similar to~\cite{dada2023impact} we also observed
+that the quality of the machine-translated data was sensitive to translation
+settings. In particular with NLLB 200, we noticed that larger context sizes and
+sequence lengths frequently resulted in degraded translation quality. Phenomena
+such as stuttering and incoherent phrase repetition became evident, especially
+in complex biomedical sentences. This degradation can stem from several factors
+inherent to current translation models and LLMs used for translation. For
+instance, generic LLMs, if configured incorrectly during inference (e.g.
+insufficient context window sizes), may fail to attend to the entire input
+sequence, effectively \textit{forgetting} earlier parts of the input and
+producing incomplete or nonsensical translations. Likewise, many dedicated
+translation models are trained on sentences. Consequently, their ability to
+handle longer sequences degrades, as the positional embeddings beyond the
+trained length are less reliable, leading to instability and errors in
+translation~\cite{costa2022no}. To ensure the reliability of the translated
+corpus, we therefore opted for a context size of 384 tokens for NLLB 200, which
+offered a favorable balance between translation throughput and linguistic
+accuracy, mitigating some of these input length-related issues.
+
+\section{Limitations and Future Work} \label{sec:limitations}
+
+While this study provides valuable insights into domain adaptation strategies
+for German biomedical language models, several limitations remain and point to
+promising directions for future research.
+
+Our investigation was limited to the RoBERTa architecture, following the design
+path of GeistBERT and GottBERT~\cite{scheible2020gottbert}. Although this
+ensured comparability, alternative Transformer architectures, including the
+recently introduced ModernBERT~\cite{warner2024smarter}, may offer performance
+advantages in terms of computational efficiency. RoBERTa's maximum input size
+limitation becomes particularly constraining in biomedical contexts, where
+clinical documents such as patient records or scientific articles often involve
+extended contexts. Future work should explore long-context Transformers.
+Architectures such as Longformer~\cite{beltagy2020longformer} and
+Nyströmformer~\cite{xiong2021nystromformer} could offer significant advantages
+in tasks requiring document-level understanding or the resolution of complex
+cross-sentence dependencies.
+
+Furthermore, our findings indicate that training from scratch can be most
+effective under certain conditions. This discrepancy highlights the need for
+further investigation into the factors that influence the effectiveness of
+training from scratch versus continued pre-training. Future work should focus on
+exploring the specific scenarios and downstream tasks where training from
+scratch might outperform continued pre-training. It would be valuable to conduct
+a more detailed analysis of the trade-offs between computational resources,
+training time, and performance gains. Understanding these dynamics could provide
+insights into optimizing model training strategies for various applications.
+Similarly, while our models build directly on GeistBERT and GottBERT in terms of
+tokenizer design and vocabulary size, these decisions were not revisited for the
+biomedical domain. Given the distinct lexical properties of medical language,
+alternative vocabulary sizes or tokenization schemes might further optimize
+model performance.
+
+Moreover, the range of biomedical benchmarks used, while diverse, does not fully
+reflect the variety of clinical language processing needs. Tasks involving
+decision support, complex narratives, and clinical reasoning were
+underrepresented, which will hopefully change in the near future with the
+release of the German Medical Text Corpus
+Project~\cite{meineke2023announcement}. Addressing these gaps is important,
+especially in light of models like medBERT.de~\cite{bressem2024medbert}, which
+explicitly targeted such scenarios. In addition, subdomains such as radiology,
+psychiatry, and primary care were not systematically explored, limiting our
+conclusions about generalizability.
+
+Our corpus design also presents limitations. While our approach exclusively used
+biomedical data, models like GeBERTa~\cite{dada2023impact} have demonstrated
+that mixed-domain corpora can enhance generalization, particularly for tasks
+that bridge specialized and general language. Investigating mixed corpus
+strategies within the same RoBERTa architecture could therefore provide deeper
+insights into optimal corpus design for domain-adaptive pre-training. Further
+considerations result from performing translation to augment the pre-training
+corpus. Although translation enabled the creation of a large biomedical corpus,
+the quality of this synthetic data was not manually verified by healthcare
+professionals and, as discussed, was sensitive to context size, with larger
+sizes impairing coherence. Future work could investigate the effects of
+translation quality and translation model behavior itself to assess and mitigate
+such artifacts more systematically. Likewise, we did not systematically analyze
+the individual contributions of the different data sources within our corpus; it
+remains unclear to what extent the translated data specifically improved
+performance compared to relying solely on the original German sources.
+Additionally, de-identified datasets, i.e. MIMIC-IV, contain artifacts such as
+anonymization masks, which are not typically found in natural prose, potentially
+affecting performance on other types of text. As a byproduct of the translation
+effort, we have obtained a large bilingual corpus of clinical texts (MIMIC-IV
+Notes) and biomedical literature (PubMed Central). This corpus could be used to
+train German-English translation models specialized in the biomedical domain,
+which would be beneficial for direct clinical applications as well as future
+corpus construction efforts. 
+
+Lastly, one should be cautious when interpreting results in cases of potential
+data leakage. Notably, GeBERTa’s pre-training corpus included CLEF data,
+possibly giving it an unfair advantage in classification tasks involving this
+benchmark. This data leakage limits direct comparability and highlights the need
+for careful dataset curation in future evaluations.

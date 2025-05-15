@@ -1,0 +1,9 @@
+\begin{tikzpicture}[font=\bfseries]
+    \node[anchor=west] (text1) at (0, 1.5) {"A \uline{bat} is needed when playing baseball."};
+    \coordinate (bat1) at ($(text1.west) + (1, -0.25)$);
+    \draw[->] (bat1) -- ++(0, -0.75) -- ++(4, 0) node[anchor=west] {[-0.76, 0.27, 0.89]};
+
+    \node[anchor=west] (text2) at (0, -0.5) {"A \uline{bat} is a nocturnal animal."};
+    \coordinate (bat2) at ($(text2.west) + (1, -0.25)$);
+    \draw[->] (bat2) -- ++(0, -0.75) -- ++(4, 0) node[anchor=west] {[0.81, -0.01, -0.16]};
+\end{tikzpicture}

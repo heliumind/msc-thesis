@@ -1,0 +1,22 @@
+% Prompt: Fill in the values in the tex table. The column for the subcolumn values in the csv are train_runtime for FT and predict_runtime for PT . Format FT as mm:ss (round up seconds) and PT as ss.ss. The values belong in the tex table with row model_name and column data_name.
+
+\begin{tabular}{l cc cc cc cc cc}
+    \toprule
+    \multirow{2}{*}[-0.5\dimexpr \aboverulesep + \belowrulesep + \cmidrulewidth]{\bfseries Model} &
+    \multicolumn{2}{c}{\bfseries BRONCO150} &
+    \multicolumn{2}{c}{\bfseries CARDIO:DE} &
+    \multicolumn{2}{c}{\bfseries GGPONC} &
+    \multicolumn{2}{c}{\bfseries CLEF} &
+    \multicolumn{2}{c}{\bfseries JSynCC} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+    & FT & PT & FT & PT & FT & PT & FT & PT & FT & PT \\
+    \midrule
+    \ChristBERT & 03:51 & 0.13 & 18:27 & 1.30 & 30:06 & 5.08 & 26:33 & 0.91 & 03:05 & 0.18 \\
+    \ChristBERT\textsubscript{scratch} & 02:40 & 0.11 & 15:16 & 0.87 & 30:03 & 5.14 & 29:51 & 0.94 & 06:19 & 0.18 \\
+    \ChristBERT\textsubscript{BPE} & 02:03 & 0.13 & 11:09 & 1.01 & 24:53 & 5.45 & 26:32 & 1.08 & 07:16 & 0.39 \\
+    medBERT.de & 04:17 & 0.13 & 08:07 & 0.95 & 25:32 & 5.81 & 27:30 & 1.06 & 04:56 & 0.21 \\
+    BioGottBERT & 05:46 & 0.11 & 16:48 & 0.92 & 32:47 & 5.14 & 29:13 & 1.05 & 05:28 & 0.19 \\
+    GeistBERT & 04:05 & 0.19 & 15:14 & 0.88 & 29:57 & 4.83 & 29:45 & 0.96 & 04:09 & 0.19 \\
+    GeBERTa & 04:17 & 0.13 & 28:47 & 1.36 & 49:41 & 7.23 & 56:48 & 2.05 & 06:11 & 0.41 \\
+    \bottomrule
+\end{tabular}

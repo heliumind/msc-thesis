@@ -1,0 +1,22 @@
+% Prompt: Fill in the values in the tex table. The column for the subcolumn values in the csv are batch_size for BS and learning_rate for LR. Enclose LR in \num{} i.e \num{7e-5}.  The values belong in the tex table with row model_name and column data_name.
+
+\begin{tabular}{l cc cc cc cc cc}
+    \toprule
+    \multirow{2}{*}[-0.5\dimexpr \aboverulesep + \belowrulesep + \cmidrulewidth]{\bfseries Model} & 
+    \multicolumn{2}{c}{\bfseries BRONCO150} &
+    \multicolumn{2}{c}{\bfseries CARDIO:DE} &
+    \multicolumn{2}{c}{\bfseries GGPONC} &
+    \multicolumn{2}{c}{\bfseries CLEF} &
+    \multicolumn{2}{c}{\bfseries JSynCC} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+    & BS & LR & BS & LR & BS & LR & BS & LR & BS & LR \\
+    \midrule
+    \ChristBERT & 48 & \num{7e-5} & 48 & \num{7e-5} & 16 & \num{7e-5} & 16 & \num{5e-5} & 48 & \num{5e-5} \\
+    \ChristBERT\textsubscript{scratch} & 32 & \num{5e-5} & 16 & \num{5e-5} & 16 & \num{7e-5} & 16 & \num{2e-5} & 64 & \num{5e-5} \\
+    \ChristBERT\textsubscript{BPE} & 32 & \num{7e-5} & 32 & \num{5e-5} & 32 & \num{7e-5} & 16 & \num{7e-5} & 16 & \num{5e-6} \\
+    medBERT.de & 16 & \num{5e-5} & 48 & \num{7e-5} & 32 & \num{5e-5} & 32 & \num{7e-5} & 64 & \num{2e-5} \\
+    BioGottBERT & 16 & \num{7e-5} & 16 & \num{5e-5} & 16 & \num{7e-5} & 16 & \num{7e-5} & 16 & \num{7e-5} \\
+    GeistBERT & 16 & \num{2e-5} & 16 & \num{5e-5} & 16 & \num{5e-5} & 16 & \num{2e-5} & 16 & \num{7e-5} \\
+    GeBERTa & 16 & \num{5e-5} & 16 & \num{7e-5} & 16 & \num{5e-5} & 48 & \num{7e-5} & 32 & \num{5e-5} \\
+    \bottomrule
+\end{tabular}

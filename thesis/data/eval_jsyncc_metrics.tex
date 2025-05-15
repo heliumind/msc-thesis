@@ -1,0 +1,36 @@
+% Prompt: Fill in the values in the tex table. The column for the column values in the csv is predict_[entity]_(prediction, recall, \ff). Format the values in percent without the symbols i.e. xx.xx. The values belong in the tex table with row model_name.
+
+\begin{tabular}{l ccc ccc ccc}
+    \toprule
+    \multirow{3}{*}[-0.5\dimexpr \aboverulesep + \belowrulesep + \cmidrulewidth]{\bfseries Model} &
+    \multicolumn{3}{c}{\bfseries Trauma} &
+    \multicolumn{3}{c}{\multirow{2}{*}{\bfseries Ophthalmology}} &
+    \multicolumn{3}{c}{\multirow{2}{*}{\bfseries Orthopedics}} \\
+    & \multicolumn{3}{c}{\bfseries Surgery} & & & \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+    & Prec. & Rec. & \ff & 
+    Prec. & Rec. & \ff & 
+    Prec. & Rec. & \ff \\
+    \midrule
+    \ChristBERT & 84.21 & \textbf{100} & \textbf{91.43} & 100 & 100 & 100 & 89.19 & \textbf{100} & 94.29 \\
+    \ChristBERT\textsubscript{scratch} & 83.78 & \underline{96.88} & 89.86 & 100 & 100 & 100 & \textbf{96.97} & \underline{96.97} & \textbf{96.97} \\
+    \ChristBERT\textsubscript{BPE} & 82.35 & 87.50 & 84.85 & 100 & 100 & 100 & 91.67 & \textbf{100} & \underline{95.65} \\
+    medBERT.de & 83.87 & 81.25 & 82.54 & 100 & 100 & 100 & \underline{93.94} & 93.94 & 93.94 \\
+    BioGottBERT & 84.21 & \textbf{100} & \textbf{91.43} & 100 & 100 & 100 & 88.89 & \underline{96.97} & 92.75 \\
+    GeistBERT & \textbf{93.33} & 87.50 & \underline{90.32} & 100 & 100 & 100 & 88.57 & 93.94 & 91.18 \\
+    GeBERTa & \underline{84.38} & 84.38 & 84.38 & 100 & 100 & 100 & \textbf{96.97} & \underline{96.97} & \textbf{96.97} \\
+    \midrule
+    & \multicolumn{3}{c}{\bfseries Emergency} & 
+    \multicolumn{3}{c}{\multirow{2}{*}{\bfseries Traumatology}} & 
+    \multicolumn{3}{c}{\multirow{2}{*}{\bfseries Anesthesiology}} \\
+    & \multicolumn{3}{c}{\bfseries Medicine} & & & \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+    \ChristBERT & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    \ChristBERT\textsubscript{scratch} & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    \ChristBERT\textsubscript{BPE} & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    medBERT.de & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    BioGottBERT & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    GeistBERT & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    GeBERTa & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 & 100 \\
+    \bottomrule
+\end{tabular}

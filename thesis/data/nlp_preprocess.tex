@@ -1,0 +1,17 @@
+\usetikzlibrary {arrows.meta} 
+
+\tikzset{
+    block/.style={rectangle, draw, thick, text centered, font=\bfseries, inner sep=.4cm}
+}
+
+\begin{tikzpicture}[node distance=5.4cm]
+
+    % Nodes
+    \node (tokenization) [block] {Tokenization};
+    \node (embedding) [block, right of=tokenization] {Embedding};
+    
+    % Arrows
+    \draw[->] ++(-4, 0) -- (tokenization.west) node[midway, above] {Raw Text};
+    \draw[->] (tokenization.east) -- (embedding.west) node[midway, above] {Tokens};
+    \draw[->] (embedding.east) -- ++(3, 0) node[midway, above] {Embeddings};
+\end{tikzpicture}

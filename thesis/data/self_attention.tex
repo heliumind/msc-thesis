@@ -1,0 +1,23 @@
+\begin{tikzpicture}[
+    every node/.append style={thick,rounded corners=2pt}]
+    \definecolor{softmax_color}{RGB}{203,231,207}
+    \node (q) at (.5,0) {$\bm{Q}$};
+    \node (k) at (1.5,0) {$\bm{K}^T$};
+    \node (v) at (2.5,0) {$\bm{V}$};
+
+    \node[draw,fill=blue!20] (matmul1) at (1,1) {MatMul};
+    \node[draw,fill=yellow!40] (scale) at (1,2) {Scale};
+    \node[draw,fill=red!20] (mask) at (1,3) {Mask};
+    \node[draw,fill=softmax_color] (softmax) at (1,4) {Softmax};
+    \node[draw, fill=blue!20, minimum width=1.75cm] (matmul2) at (1.75,5) {MatMul};
+
+    \path[->,thick]
+        (matmul1) edge (scale)
+        (scale) edge (mask)
+        (mask) edge (softmax)
+        (q) edge (.5,.7)
+        (k) edge (1.5,.7)
+        (v) edge (2.5,4.7)
+        (softmax) edge (1,4.7)
+        (matmul2) edge[->] ++(0, .7);
+\end{tikzpicture}
